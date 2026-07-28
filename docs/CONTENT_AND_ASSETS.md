@@ -150,11 +150,15 @@ Each template should define:
 }
 ```
 
-A 28-person team needs 14 pair references if every pair has a unique assignment.
+A 28-person team receives all 14 distinct two-person templates exactly once:
+no meme reference is duplicated within that team.
 
 A 27-person team needs 12 pair references + 1 trio reference.
 
-The same underlying template set may be reused across teams, but each team's generated version should feature its own volunteer.
+The production manifest therefore contains exactly 15 templates: 14 unique
+two-person references and one three-person reference. The same template set is
+reused across teams, but each team's generated version features its own
+pre-selected volunteer.
 
 Use recognisable body-language/pose memes rather than references where the humour depends on reading tiny text.
 

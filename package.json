@@ -1,0 +1,47 @@
+{
+  "name": "mulearn-orientation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "node --import tsx --watch server/index.ts",
+    "dev:client": "vite",
+    "build": "tsc -p tsconfig.server.json && vite build",
+    "start": "node dist-server/server/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit && tsc -p tsconfig.server.json --noEmit",
+    "db:migrate": "node --import tsx scripts/migrate.ts",
+    "seed:demo": "node --import tsx scripts/seed-demo.ts",
+    "provision:access": "node dist-server/server/provision-access.js",
+    "event:reset-demo": "node --import tsx scripts/reset-demo.ts",
+    "content:validate": "node --import tsx scripts/validate-content.ts",
+    "content:tiles": "node --import tsx scripts/generate-tiles.ts",
+    "test:content-fixture": "node --import tsx scripts/create-approved-test-fixture.ts",
+    "simulate:550": "node --import tsx scripts/simulate-550.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.1",
+    "hono": "^4.9.6",
+    "qrcode.react": "^4.2.0",
+    "qr-scanner": "^1.4.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.2",
+    "sharp": "^0.34.4",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.4",
+    "vitest": "^3.2.4"
+  },
+  "packageManager": "pnpm@11.9.0"
+}

@@ -2,7 +2,7 @@
 
 ## Final content-bank size
 
-Prepare exactly **15 reusable meme-reference images** for the event:
+Prepare exactly **15 reusable meme-reference templates** for the event:
 
 - **14 two-person reference images**
 - **1 three-person reference image**
@@ -29,7 +29,10 @@ Use 12 of the pair references plus the trio reference:
 
 Randomly choose which two pair references are omitted so different odd-sized teams do not necessarily have the exact same subset.
 
-This means we do **not** need hundreds of unique AI references. The same approved 15-image bank can be reused across all 20 teams.
+The same approved 15-template composition bank is reused across all 20 teams.
+Production still contains a team-specific generated render for every
+team/template combination (300 files), so the participant endpoint can always
+show the relevant fixed team volunteer.
 
 ---
 
@@ -56,19 +59,16 @@ Do not commit the raw volunteer source photographs to this public repository by 
 
 ---
 
-# How volunteers should be distributed across references
+# How volunteers should appear in references
 
-Because most references contain two people, 14 pair images provide **28 face slots**, plus three more slots in the trio image.
+Each team's render must feature that team's own fixed volunteer recognisably in
+at least one prominent role. Additional roles may use other approved volunteers,
+but must not make the team identity ambiguous. The humour depends on juniors
+recognising the volunteer who is physically waiting in their animal zone.
 
-With 20 fixed team volunteers, this is enough to:
-
-- feature every selected volunteer at least once
-- repeat the funniest/most recognisable volunteers selectively
-- create funny cross-volunteer pairings
-
-The final 20-person volunteer roster should be distributed across the 15 references after all photos arrive.
-
-Do **not** require every team's own volunteer to appear in every reference for that team; the bank is shared across teams. The humour comes from juniors recognising the actual seniors/volunteers appearing in the generated meme cards.
+The 15 compositions are shared; the rendered identity assets are team-scoped.
+Human review must approve all 15 renders for every team before the manifest is
+set to production `approved` mode.
 
 ---
 
@@ -326,18 +326,20 @@ The reserve poses follow the same no-prop/no-contact/fast-recreation principles.
 
 # AI generation workflow
 
-The 15 references are **pre-event assets**.
+The 15 templates and their 300 team-specific renders are **pre-event assets**.
 
 Suggested process once all volunteer photos are available:
 
-1. Load all volunteer identity references.
-2. Assign each volunteer to one or more of the 15 compositions so all 20 fixed volunteers appear at least once.
-3. Generate each composition with clear body language and a simple background.
+1. Load the 20 fixed team-volunteer identity references.
+2. For every team, generate all 15 compositions with that team's volunteer in a
+   prominent, recognisable role.
+3. Keep body language clear and the background simple.
 4. Check identity recognisability.
 5. Check whether a student pair can understand the pose on a phone in <5 seconds.
 6. Reject/regenerate images with extra limbs, unclear hands, impossible poses, confusing scene geometry, or excessive background clutter.
 7. Export consistent 4:5 mobile-friendly files (e.g. WebP/JPEG around 1200–1600 px long edge).
-8. Add approved images to the event content manifest.
+8. Install every approved render at the documented
+   `meme-references/{teamSlug}/{templateId}.webp` path.
 9. Keep original volunteer source files private/outside git.
 
 The production application must never require live AI generation.
@@ -376,5 +378,5 @@ The orientation app should feel related to the current µLearn Sahrdaya site but
 - 15-reference structure confirmed: 14 pair + 1 trio
 - 8 volunteer source photos currently available and inspected
 - more volunteer photos expected
-- final face-to-template mapping should happen only after the volunteer-photo set is complete
+- all 300 team/template renders must be reviewed after the volunteer-photo set is complete
 - branding source repository identified
