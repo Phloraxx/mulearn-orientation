@@ -79,17 +79,20 @@ export const QA_BANK = [
   ["Faculty varilla enna newsinte speed ethra?", "College Wi-Fi-nekkal fast."]
 ] as const;
 
-export const MEME_TEMPLATES = Array.from({ length: 14 }, (_, index) => ({
+export const MEME_TEMPLATES = Array.from({ length: 15 }, (_, index) => ({
   id: `pose-${String(index + 1).padStart(2, "0")}`,
   title: [
     "Absolute Cinema", "Distracted Duo", "Pointing Spidermen", "Dramatic Handshake",
     "Surprised Committee", "Tiny Interview", "Confused Seminar", "Epic Approval",
     "Last Bench Council", "Record Submission", "Canteen Discovery", "Attendance Panic",
-    "Volunteer Recruitment", "Deadline Sprint"
+    "Volunteer Recruitment", "Deadline Sprint", "Committee Chaos Trio"
   ][index],
-  groupSize: index === 13 ? 3 : 2,
+  groupSize: index === 14 ? 3 : 2,
   safeForOrientation: true
 }));
+
+export const PAIR_MEME_TEMPLATES = MEME_TEMPLATES.filter(template => template.groupSize === 2);
+export const TRIO_MEME_TEMPLATE = MEME_TEMPLATES.find(template => template.groupSize === 3)!;
 
 export const PHASES = ["SETUP", "ASSEMBLY", "MEME", "MYSTERY", "REVEAL", "ENDED"] as const;
 export type Phase = typeof PHASES[number];

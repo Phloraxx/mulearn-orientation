@@ -41,9 +41,17 @@ function ParticipantApp() {
 
   useEffect(() => {
     const recover = new URLSearchParams(location.search).get("recover");
+    const recoveredScan = new URLSearchParams(location.search).get("scan");
     if (recover) {
-      void post<{ participant: Participant }>("/api/participant/restore", { sessionToken: recover })
+      void post<{ participant: Participant; scanToken?: string }>("/api/participant/restore", {
+        sessionToken: recover,
+        scanToken: recoveredScan
+      })
         .then(result => {
+          if (result.scanToken) {
+            localStorage.setItem("orientation_scan_token", result.scanToken);
+            setScanToken(result.scanToken);
+          }
           setParticipant(result.participant);
           history.replaceState(null, "", "/play");
         }).catch(failure => setError(failure.message)).finally(() => setLoading(false));

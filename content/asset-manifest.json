@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "mode": "placeholder",
-  "notes": "Deterministic SVG stand-ins are served until reviewed final assets are installed.",
+  "mode": "demo",
+  "notes": "Change mode to approved only after all generated production assets are human-reviewed and installed.",
   "memeReferencePattern": "generated-assets/meme-references/{teamSlug}/{templateId}.webp",
   "mysterySourcePattern": "generated-assets/mysteries/{teamSlug}/source.webp",
   "puzzleTilePattern": "generated-assets/mysteries/{teamSlug}/tiles/{tileIndex}.webp",

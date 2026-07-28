@@ -6,11 +6,13 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import type { OrientationDb } from "./db.js";
-import { audit, makeId } from "./db.js";
+import { audit, makeId, transaction } from "./db.js";
 import { GameError, GameService } from "./game.js";
 import { Slideshow } from "./slideshow.js";
 import { escapeXml, hash, now, safeEqual, token } from "./utils.js";
 import { PHASES, TEAMS, type Phase } from "./content.js";
+import { productionConfigErrors, staffBootstrapSecret } from "./config.js";
+import { AssetStore, type ResolvedAsset } from "./assets.js";
 
 type Staff = { role: string; teamId?: string | null };
 
@@ -50,9 +52,10 @@ function memeReferenceSvg(teamName: string, emoji: string, title: string, color:
   </svg>`;
 }
 
-export function createApp(db: OrientationDb) {
+export function createApp(db: OrientationDb, options: { assets?: AssetStore } = {}) {
   const app = new Hono();
   const game = new GameService(db);
+  const assets = options.assets ?? new AssetStore();
   const dataDir = process.env.DATA_DIR ?? resolve("data");
   const mediaDir = join(dataDir, "media", "event-main");
   const secure = process.env.NODE_ENV === "production";
@@ -101,6 +104,19 @@ export function createApp(db: OrientationDb) {
 
   app.get("/health", c => c.json({ ok: true, version: process.env.APP_VERSION ?? "dev" }));
   app.get("/ready", async c => {
+    const configErrors = productionConfigErrors();
+    if (configErrors.length) {
+      return c.json({ ready: false, configuration: "invalid", errors: configErrors }, 503);
+    }
+    const assetErrors = assets.readinessErrors();
+    if (assetErrors.length) {
+      return c.json({
+        ready: false,
+        assets: "invalid",
+        errors: assetErrors.slice(0, 25),
+        errorCount: assetErrors.length
+      }, 503);
+    }
     await mkdir(mediaDir, { recursive: true });
     const teamCount = Number((db.prepare("SELECT COUNT(*) AS n FROM teams").get() as { n: number }).n);
     const probe = join(mediaDir, ".write-probe");
@@ -116,11 +132,19 @@ export function createApp(db: OrientationDb) {
   });
 
   app.post("/api/participant/restore", async c => {
-    const body: { sessionToken?: string } = await c.req.json<{ sessionToken?: string }>().catch(() => ({}));
+    const body: { sessionToken?: string; scanToken?: string } =
+      await c.req.json<{ sessionToken?: string; scanToken?: string }>().catch(() => ({}));
     if (body.sessionToken) setCookie(c, "participant_session", body.sessionToken, cookieOptions);
     const raw = body.sessionToken ?? getCookie(c, "participant_session");
     if (!raw) throw new GameError("SESSION_REQUIRED", "No participant session.", 401);
-    return c.json({ participant: game.restoreParticipant(raw) });
+    const participant = game.restoreParticipant(raw);
+    if (body.scanToken) {
+      const matchingScan = db.prepare(`
+        SELECT id FROM participants WHERE id=? AND scan_token_hash=?
+      `).get(participant.id, hash(body.scanToken)) as { id: string } | undefined;
+      if (!matchingScan) throw new GameError("RECOVERY_SCAN_INVALID", "Recovery QR token is invalid.", 401);
+    }
+    return c.json({ participant, ...(body.scanToken ? { scanToken: body.scanToken } : {}) });
   });
 
   app.get("/api/participant/snapshot", c => c.json({ participant: game.participantSnapshotById(participantId(c)) }));
@@ -129,20 +153,36 @@ export function createApp(db: OrientationDb) {
     return c.json(game.match(participantId(c), body.key ?? ""));
   });
 
-  app.get("/api/participant/meme-reference", c => {
-    const snapshot = game.participantSnapshotById(participantId(c));
+  app.get("/api/participant/meme-reference", async c => {
+    const id = participantId(c);
+    const snapshot = game.participantSnapshotById(id);
     if (snapshot.phase !== "MEME" || !snapshot.meme) throw new GameError("NOT_AVAILABLE", "Meme reference is not available.", 404);
+    const assignment = db.prepare(`
+      SELECT ma.template_id FROM participants p JOIN meme_assignments ma ON ma.id=p.meme_assignment_id WHERE p.id=?
+    `).get(id) as { template_id: string } | undefined;
+    const generated = assignment
+      ? assets.memeReference(String(snapshot.team.slug), assignment.template_id)
+      : null;
+    if (generated) return serveAsset(generated, "private, max-age=300");
+    if (!assets.placeholdersAllowed()) {
+      throw new GameError("ASSET_NOT_READY", "Approved meme reference is missing.", 503);
+    }
     return c.body(memeReferenceSvg(String(snapshot.team.name), String(snapshot.team.emoji), String(snapshot.meme.title), String(snapshot.team.color)), 200, {
       "Content-Type": "image/svg+xml", "Cache-Control": "private, max-age=300"
     });
   });
 
-  app.get("/api/participant/tile", c => {
+  app.get("/api/participant/tile", async c => {
     const id = participantId(c);
     const row = db.prepare(`
       SELECT p.paired_at,p.puzzle_index,t.slug FROM participants p JOIN teams t ON t.id=p.team_id WHERE p.id=?
     `).get(id) as { paired_at: string | null; puzzle_index: number | null; slug: string };
     if (!row.paired_at || row.puzzle_index === null) throw new GameError("TILE_LOCKED", "Match first to unlock your tile.", 403);
+    const generated = assets.puzzleTile(row.slug, row.puzzle_index);
+    if (generated) return serveAsset(generated, "private, max-age=3600");
+    if (!assets.placeholdersAllowed()) {
+      throw new GameError("ASSET_NOT_READY", "Approved puzzle tile is missing.", 503);
+    }
     return c.body(mysterySvg(row.slug, row.puzzle_index), 200, {
       "Content-Type": "image/svg+xml", "Cache-Control": "private, max-age=3600"
     });
@@ -159,11 +199,8 @@ export function createApp(db: OrientationDb) {
       valid = Boolean(team && hash(body.token ?? "") === team.volunteer_token_hash);
       teamId = team?.id ?? null;
     } else {
-      const envKey: Record<string, string> = {
-        host: "HOST_BOOTSTRAP_SECRET", admin: "ADMIN_BOOTSTRAP_SECRET", projector: "PROJECTOR_BOOTSTRAP_SECRET"
-      };
-      const expected = process.env[envKey[role]] ?? `${role}-demo-secret`;
-      valid = Boolean(envKey[role] && safeEqual(body.token ?? "", expected));
+      const expected = staffBootstrapSecret(role);
+      valid = Boolean(expected && safeEqual(body.token ?? "", expected));
     }
     if (!valid) throw new GameError("BAD_BOOTSTRAP", "Invalid provisioned access token.", 401);
     const raw = token();
@@ -266,12 +303,17 @@ export function createApp(db: OrientationDb) {
     return c.json({ ...next, slide: { ...media, url: `/media/meme/${media.id}` } });
   });
 
-  app.get("/api/reveal/mystery/:teamId", c => {
+  app.get("/api/reveal/mystery/:teamId", async c => {
     staff(c, ["projector", "host", "admin"]);
     const event = game.event();
     if (event.phase !== "REVEAL") throw new GameError("REVEAL_LOCKED", "Mystery image is still locked.", 403);
     const team = db.prepare("SELECT slug FROM teams WHERE id=?").get(c.req.param("teamId")) as { slug: string } | undefined;
     if (!team) throw new GameError("TEAM_NOT_FOUND", "Team not found.", 404);
+    const generated = assets.mysterySource(team.slug);
+    if (generated) return serveAsset(generated, "private, no-store");
+    if (!assets.placeholdersAllowed()) {
+      throw new GameError("ASSET_NOT_READY", "Approved mystery source is missing.", 503);
+    }
     return c.body(mysterySvg(team.slug), 200, { "Content-Type": "image/svg+xml", "Cache-Control": "no-store" });
   });
 
@@ -336,11 +378,19 @@ export function createApp(db: OrientationDb) {
 
   app.post("/api/admin/participants/:id/recovery", c => {
     staff(c, ["admin"]);
-    const raw = token();
-    const result = db.prepare("UPDATE participants SET session_hash=? WHERE id=?").run(hash(raw), c.req.param("id"));
-    if (!result.changes) throw new GameError("NOT_FOUND", "Participant not found.", 404);
-    audit(db, "admin", "participant.session_recovered", c.req.param("id"));
-    return c.json({ recoveryUrl: `${process.env.SITE_URL ?? "http://localhost:5173"}/?recover=${raw}` });
+    const sessionToken = token();
+    const scanToken = token(16);
+    transaction(db, () => {
+      const result = db.prepare(`
+        UPDATE participants SET session_hash=?,scan_token_hash=? WHERE id=?
+      `).run(hash(sessionToken), hash(scanToken), c.req.param("id"));
+      if (!result.changes) throw new GameError("NOT_FOUND", "Participant not found.", 404);
+      audit(db, "admin", "participant.session_and_scan_recovered", c.req.param("id"));
+    });
+    const site = process.env.SITE_URL ?? "http://localhost:5173";
+    return c.json({
+      recoveryUrl: `${site}/?recover=${sessionToken}&scan=${scanToken}`
+    });
   });
 
   app.post("/api/admin/participants/:id/reassign", async c => {
@@ -415,7 +465,17 @@ export function createApp(db: OrientationDb) {
     app.use("/*", serveStatic({ root: "./dist-client" }));
     app.get("*", serveStatic({ path: "./dist-client/index.html" }));
   }
-  return { app, game };
+  return { app, game, assets };
+}
+
+async function serveAsset(asset: ResolvedAsset, cacheControl: string) {
+  return new Response(await readFile(asset.path), {
+    headers: {
+      "Content-Type": asset.contentType,
+      "Cache-Control": cacheControl,
+      "X-Content-Type-Options": "nosniff"
+    }
+  });
 }
 
 function loadSlides(db: OrientationDb) {

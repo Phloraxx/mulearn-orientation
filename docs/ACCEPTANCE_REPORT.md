@@ -11,7 +11,7 @@ Date: 2026-07-28
 | session/team restoration | automated test and live process-restart smoke test |
 | volunteer team isolation | service and HTTP upload tests |
 | duplicate scan safety | automated idempotency test |
-| pair/trio memes | automated 28-person and 27-person assignment test |
+| 14 unique pair references + 1 trio | exact-cardinality content validation; 28-person automated test verifies 14 distinct template IDs |
 | projector never receives reference memes | separate private participant reference route; projector media route serves captures only |
 | adaptive endless slideshow | unseen priority, duration floor, recycling, and repeat-avoidance tests |
 | no scoring/leaderboard | no score entity, endpoint, control, or UI |
@@ -23,22 +23,29 @@ Date: 2026-07-28
 | late matching after theory | automated test |
 | projector/host reveal | fixed grid, server timer, theory step, timed 3–2–1, authorised source-image route |
 | restart/persistence | live compiled-service restart restored the same participant/team from persistent SQLite |
-| recovery controls | search, check/uncheck, absence, counterpart release, new-device link, safe reassignment, Q&A regeneration, media reset |
+| recovery controls | new-device recovery atomically rotates both session and scan-token hashes; automated pre-check-in recovery verifies the replacement QR works and both old credentials fail |
+| production configuration | startup rejects missing, weak, demo, placeholder, example, or local configuration; `/ready` also fails closed |
+| generated asset runtime | approved meme references, mystery tiles, and reveal originals are served from the manifest; automated selection/fallback and protected-original tests |
+| production asset packaging | repository content is copied to `/content`; documented read-only `/content` mount overrides it |
+| CI | GitHub Actions runs typecheck, tests, content validation, and production build on pull requests |
 | production build | TypeScript and Vite production builds pass |
 | Docker build | final image `mulearn-orientation:acceptance` built successfully |
-| container readiness | Docker health `healthy`; `/ready` confirmed DB, 20 teams, and writable media volume |
+| container fail-closed behavior | no-secret startup exited 1; bundled demo content produced `/health` 200 and `/ready` 503 |
+| container readiness | approved `/content` mount produced Docker `healthy`, `/health` 200, and `/ready` 200 with 20 teams |
 
 ## Final command results
 
 ```text
 tsc --noEmit                         PASS
 tsc -p tsconfig.server.json --noEmit PASS
-vitest run                           2 files, 14 tests passed
-content validation                   PASS
-Vite build                           PASS, 286.83 kB JS / 92.84 kB gzip
-Docker build                         PASS
-Docker health/readiness              healthy / ready=true
-access provisioning in container     PASS, 23 private links emitted
+vitest run                           3 files, 21 tests passed
+demo content validation              PASS, 15 templates
+approved fixture validation          PASS, all runtime assets present
+Vite build                           PASS, 286.98 kB JS / 92.87 kB gzip
+Docker build                         PASS, mulearn-orientation:pr2
+Docker missing-secret startup        PASS, exited 1
+Docker demo readiness                PASS, health=200 / ready=503
+Docker approved readiness            PASS, healthy / health=200 / ready=200
 ```
 
 The representative in-process concurrency simulation completed with:
@@ -53,7 +60,7 @@ The representative in-process concurrency simulation completed with:
   "detectives": 10,
   "simulatedSseClients": 573,
   "eventDeliveries": 952326,
-  "elapsedMs": 393
+  "elapsedMs": 264
 }
 ```
 

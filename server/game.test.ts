@@ -142,10 +142,12 @@ describe("meme assignment shape", () => {
         hash(`panda-scan-${index}`), stamp, stamp, stamp);
     }
     game.generateMemeAssignments();
-    const lion = db.prepare("SELECT group_size FROM meme_assignments WHERE team_id='team-lion'").all() as Array<{ group_size: number }>;
+    const lion = db.prepare("SELECT group_size,template_id FROM meme_assignments WHERE team_id='team-lion'").all() as
+      Array<{ group_size: number; template_id: string }>;
     const panda = db.prepare("SELECT group_size FROM meme_assignments WHERE team_id='team-panda'").all() as Array<{ group_size: number }>;
     expect(lion).toHaveLength(14);
     expect(lion.every(group => group.group_size === 2)).toBe(true);
+    expect(new Set(lion.map(group => group.template_id)).size).toBe(14);
     expect(panda.filter(group => group.group_size === 2)).toHaveLength(12);
     expect(panda.filter(group => group.group_size === 3)).toHaveLength(1);
   });

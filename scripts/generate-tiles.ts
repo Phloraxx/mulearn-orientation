@@ -1,28 +1,58 @@
+import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import sharp from "sharp";
 import { TEAMS } from "../server/content.js";
 
-const root = resolve(process.argv[2] ?? "generated-assets/mysteries");
-for (const [teamIndex, team] of TEAMS.entries()) {
-  const directory = resolve(root, team.slug, "tiles");
-  await mkdir(directory, { recursive: true });
-  const hue = (teamIndex * 43) % 360;
-  const scene = `<rect width="700" height="640" fill="hsl(${hue} 72% 18%)"/>
-    <circle cx="560" cy="110" r="85" fill="#facc15"/><path d="M0 480 Q170 400 350 500 T700 450 V640 H0Z" fill="#166534"/>
-    <g stroke="#fff" stroke-width="16" stroke-linecap="round" fill="none"><circle cx="245" cy="225" r="54" fill="#ffcf9d"/>
-    <path d="M245 280L220 420M220 335L120 295M224 345L345 300M220 420L130 535M220 420L330 520"/>
-    <circle cx="450" cy="300" r="45" fill="#bfdbfe"/><path d="M450 345L485 455M470 390L570 345M475 450L410 550M480 452L565 530"/></g>`;
-  await writeFile(resolve(root, team.slug, "source.svg"),
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 640">${scene}</svg>`);
-  for (let index = 0; index < 28; index++) {
-    const x = (index % 7) * 100;
-    const y = Math.floor(index / 7) * 160;
-    await writeFile(resolve(directory, `${String(index).padStart(2, "0")}.svg`),
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} 100 160" preserveAspectRatio="xMidYMid slice">${scene}</svg>`);
+const root = resolve(process.argv[2] ?? "content/generated-assets/mysteries");
+const columns = 7;
+const rows = 4;
+const overlapRatio = 0.035;
+
+for (const team of TEAMS) {
+  const teamRoot = resolve(root, team.slug);
+  const source = resolve(teamRoot, "source.webp");
+  if (!existsSync(source)) {
+    throw new Error(`Missing approved mystery source for ${team.slug}: ${source}`);
   }
-  await writeFile(resolve(root, team.slug, "private-layout.json"), JSON.stringify({
-    private: true, columns: 7, rows: 4, tileCount: 28,
-    tiles: Array.from({ length: 28 }, (_, index) => ({ index, x: index % 7, y: Math.floor(index / 7) }))
+  const metadata = await sharp(source).metadata();
+  if (!metadata.width || !metadata.height) throw new Error(`Cannot read dimensions for ${source}`);
+  if (metadata.width < 1400 || metadata.height < 800) {
+    throw new Error(`${source} is too small; approved mystery sources must be at least 1400×800.`);
+  }
+  const tilesDirectory = resolve(teamRoot, "tiles");
+  await mkdir(tilesDirectory, { recursive: true });
+  const cellWidth = metadata.width / columns;
+  const cellHeight = metadata.height / rows;
+  const layout: Array<{ index: number; x: number; y: number }> = [];
+
+  for (let index = 0; index < 28; index++) {
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+    const overlapX = cellWidth * overlapRatio;
+    const overlapY = cellHeight * overlapRatio;
+    const left = Math.max(0, Math.floor(column * cellWidth - overlapX));
+    const top = Math.max(0, Math.floor(row * cellHeight - overlapY));
+    const right = Math.min(metadata.width, Math.ceil((column + 1) * cellWidth + overlapX));
+    const bottom = Math.min(metadata.height, Math.ceil((row + 1) * cellHeight + overlapY));
+    await sharp(source)
+      .extract({ left, top, width: right - left, height: bottom - top })
+      .resize(600, 960, { fit: "fill" })
+      .webp({ quality: 88 })
+      .toFile(resolve(tilesDirectory, `${String(index).padStart(2, "0")}.webp`));
+    layout.push({ index, x: column, y: row });
+  }
+
+  await writeFile(resolve(teamRoot, "private-layout.json"), JSON.stringify({
+    private: true,
+    columns,
+    rows,
+    tileCount: 28,
+    overlapRatio,
+    sourceWidth: metadata.width,
+    sourceHeight: metadata.height,
+    tiles: layout
   }, null, 2));
 }
-console.log(`Generated 20 placeholder mystery sources and 560 portrait tiles under ${root}.`);
+
+console.log(`Generated 560 production WebP puzzle tiles from 20 approved mystery sources under ${root}.`);

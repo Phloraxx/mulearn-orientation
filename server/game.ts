@@ -1,6 +1,6 @@
 import type { OrientationDb } from "./db.js";
 import { audit, makeId, transaction } from "./db.js";
-import { MEME_TEMPLATES, PHASES, QA_BANK, type Phase } from "./content.js";
+import { PAIR_MEME_TEMPLATES, PHASES, QA_BANK, TRIO_MEME_TEMPLATE, type Phase } from "./content.js";
 import { hash, now, shuffle, token } from "./utils.js";
 
 type Row = Record<string, string | number | null>;
@@ -204,7 +204,8 @@ export class GameService {
         let offset = 0;
         groupSizes.forEach((size, index) => {
           const assignmentId = makeId("meme");
-          const template = size === 3 ? MEME_TEMPLATES.at(-1)! : MEME_TEMPLATES[index % 13];
+          const template = size === 3 ? TRIO_MEME_TEMPLATE : PAIR_MEME_TEMPLATES[index];
+          if (!template) throw new GameError("MEME_CONTENT_MISSING", `No unique meme reference exists for group ${index + 1}.`, 500);
           this.db.prepare(`INSERT INTO meme_assignments(id,team_id,template_id,title,group_size)
             VALUES(?,?,?,?,?)`).run(assignmentId, team.id, template.id, template.title, size);
           for (const participant of participants.slice(offset, offset + size)) {

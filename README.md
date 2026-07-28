@@ -107,16 +107,22 @@ pnpm simulate:550
 The safe demo reset deliberately refuses to run unless `DEMO_MODE=1` and
 `NODE_ENV` is not `production`.
 
-## Placeholder content workflow
+## Generated content workflow
 
 Raw volunteer photos go under the gitignored `content-input/volunteers/<team>/`
 tree. `content/asset-manifest.json` documents the reviewed output contract.
-`pnpm content:tiles` generates deterministic 7×4 development sources and 28
-portrait tiles per team under `generated-assets/`; tile coordinates stay in
-private manifests and are never sent through participant APIs.
+The template set is fixed at exactly 15 references: 14 unique two-person
+templates and one three-person template. Approved meme references are installed
+under `content/generated-assets/meme-references/`.
 
-The runtime SVG stand-ins keep every game flow usable until the organiser supplies
-real volunteer photos. AI generation is an optional pre-event asset step only.
+After approved mystery source images are installed, `pnpm content:tiles` crops
+each real source into its 7×4 set of 28 portrait WebP tiles. Coordinates remain
+in private manifests and are never sent through participant APIs. See
+`content/generated-assets/README.md` for the exact tree.
+
+Runtime SVG stand-ins keep the game usable only in development/demo mode until
+the organiser supplies real assets. Production requires an approved, complete
+content bundle; `/ready` fails closed if anything is missing.
 
 ## Production environment
 
@@ -135,7 +141,14 @@ port: 3000
 database: /data/orientation.sqlite
 captures: /data/media/event-main
 volume: /data
+approved content: /content (read-only)
 ```
+
+Every production secret must be independently generated, at least 32 characters,
+and must not contain demo/placeholder/example text. `SITE_URL` must be the public
+HTTPS origin. The image includes the repository's `content/` directory; a
+separately managed approved bundle may instead be mounted read-only at
+`/content`.
 
 The first start seeds exactly 20 fixed animal teams and volunteer slots.
 After the persistent volume exists, run this once inside the app container to
@@ -152,7 +165,9 @@ Do not share host/admin/projector links with participants.
 1. Create one Dokploy application from
    `https://github.com/Phloraxx/mulearn-orientation`.
 2. Select Dockerfile build, repository root context, and internal port `3000`.
-3. Attach a named persistent volume such as `orientation-data` at `/data`.
+3. Attach a named persistent volume such as `orientation-data` at `/data`. If
+   content is managed separately, mount the approved bundle read-only at
+   `/content`.
 4. Add every variable from `.env.example`, using strong unique values. Keep
    `SITE_URL=https://orientation.mulearnscet.in`.
 5. Configure the Dokploy domain `orientation.mulearnscet.in`, enable HTTPS, and
@@ -163,8 +178,9 @@ Do not share host/admin/projector links with participants.
 7. Deploy and wait for both `/health` and `/ready` to return HTTP 200.
 8. Run `node dist-server/server/provision-access.js` in the running container and distribute the 20
    resulting volunteer links plus the host/admin/projector links privately.
-9. Run `pnpm content:validate`, `pnpm test`, and `pnpm simulate:550` against the
-   release commit before opening registration.
+9. Run `CONTENT_DIR=/path/to/approved-content pnpm content:validate`,
+   `pnpm test`, and `pnpm simulate:550` against the release commit before
+   opening registration.
 10. Verify persistence by joining one test participant, restarting the container,
     confirming restoration, and deleting/deactivating that test record in Admin.
 11. Create the `orientation` DNS record to the existing Dokploy/Traefik ingress.

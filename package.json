@@ -20,6 +20,7 @@
     "event:reset-demo": "node --import tsx scripts/reset-demo.ts",
     "content:validate": "node --import tsx scripts/validate-content.ts",
     "content:tiles": "node --import tsx scripts/generate-tiles.ts",
+    "test:content-fixture": "node --import tsx scripts/create-approved-test-fixture.ts",
     "simulate:550": "node --import tsx scripts/simulate-550.ts"
   },
   "dependencies": {
@@ -36,6 +37,7 @@
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.2",
+    "sharp": "^0.34.4",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "vite": "^7.1.4",

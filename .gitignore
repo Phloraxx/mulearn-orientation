@@ -7,5 +7,7 @@ data/
 content-input/*
 !content-input/README.md
 generated-assets/
+!content/generated-assets/
+!content/generated-assets/**
 coverage/
 *.sqlite*

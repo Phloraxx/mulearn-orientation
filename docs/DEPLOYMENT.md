@@ -29,6 +29,7 @@ orientation app container :3000
    ├─ SSE
    ├─ /data/orientation.sqlite
    └─ /data/media/...
+   └─ /content/approved generated event assets (read-only)
 ```
 
 Persistent Docker volume mounted at `/data`.
@@ -59,6 +60,7 @@ Recommended:
 PORT=3000
 DATA_DIR=/data
 DATABASE_PATH=/data/orientation.sqlite
+CONTENT_DIR=/content
 ```
 
 Container should:
@@ -83,18 +85,24 @@ PORT=3000
 SITE_URL=https://orientation.mulearnscet.in
 DATA_DIR=/data
 DATABASE_PATH=/data/orientation.sqlite
+CONTENT_DIR=/content
 
 # Generate strong random values before event
 SESSION_SECRET=change-me
 HOST_BOOTSTRAP_SECRET=change-me
 ADMIN_BOOTSTRAP_SECRET=change-me
 PROJECTOR_BOOTSTRAP_SECRET=change-me
+VOLUNTEER_TOKEN_PREFIX=change-me
 
 # Optional content generation only; never required for live gameplay
 OPENAI_API_KEY=
 ```
 
 Do not commit real secrets.
+
+Production refuses to start when any required secret is absent, shorter than
+32 characters, or contains a demo/placeholder/example value. `SITE_URL` must be
+the public HTTPS origin and cannot be localhost.
 
 Volunteer access tokens should preferably be generated/provisioned by a seed/admin command rather than written as plaintext into source files.
 
@@ -117,6 +125,17 @@ Attach persistent volume:
 ```text
 orientation-data → /data
 ```
+
+Approved content may either be baked into `content/` before building the image,
+or mounted read-only from a separately managed persistent content volume:
+
+```text
+orientation-content → /content (read-only)
+```
+
+The directory must contain `asset-manifest.json` with `"mode": "approved"` and
+the complete `generated-assets/` tree documented in
+`content/generated-assets/README.md`.
 
 Set environment variables from the production secret store/UI.
 
@@ -187,7 +206,8 @@ Before deployment passes health/readiness:
 - content manifest parses
 - exactly 20 teams configured for production event seed
 - all enabled teams have volunteers
-- expected meme/mystery assets exist or deployment explicitly runs in placeholder/demo mode
+- the manifest is `approved` and all 300 meme references, 20 mystery sources,
+  and 560 puzzle tiles exist
 
 Provide separate `/health` and optionally `/ready` endpoints.
 
@@ -199,15 +219,16 @@ Provide separate `/health` and optionally `/ready` endpoints.
 
 Recommended sequence:
 
-1. Implement/test with placeholder assets.
+1. Implement/test locally with placeholder assets.
 2. Deploy staging/preview on a temporary hostname if desired.
 3. Receive volunteer Drive photos.
 4. Generate/review final meme references and mystery images.
 5. Freeze 20 animal ↔ volunteer mappings.
-6. Run content validation.
+6. Set the reviewed manifest to `approved` and run content validation against
+   that exact content directory.
 7. Run automated tests.
 8. Run 550-participant load simulation.
-9. Deploy production image.
+9. Deploy the production image with the exact approved `/content` bundle.
 10. Verify persistent volume.
 11. Provision all volunteer/host/admin/projector access links.
 12. Test from real Android + iPhone devices over mobile data.

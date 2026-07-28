@@ -5,6 +5,8 @@ dist-client
 dist-server
 data
 generated-assets
+!content/generated-assets
+!content/generated-assets/**
 content-input
 coverage
 .env

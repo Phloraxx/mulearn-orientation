@@ -9,11 +9,12 @@ RUN pnpm build && pnpm prune --prod
 
 FROM node:24-bookworm-slim AS runtime
 WORKDIR /app
-ENV NODE_ENV=production PORT=3000 DATA_DIR=/data DATABASE_PATH=/data/orientation.sqlite
+ENV NODE_ENV=production PORT=3000 DATA_DIR=/data DATABASE_PATH=/data/orientation.sqlite CONTENT_DIR=/content
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist-server ./dist-server
 COPY --from=build /app/dist-client ./dist-client
 COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/content /content
 COPY docker-entrypoint.sh /usr/local/bin/orientation-entrypoint
 RUN chmod +x /usr/local/bin/orientation-entrypoint && mkdir -p /data && chown node:node /data
 EXPOSE 3000

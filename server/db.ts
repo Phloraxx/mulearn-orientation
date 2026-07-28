@@ -2,6 +2,7 @@ import { DatabaseSync } from "node:sqlite";
 import { mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { TEAMS } from "./content.js";
+import { volunteerTokenPrefix } from "./config.js";
 import { hash, id, now } from "./utils.js";
 
 export type OrientationDb = DatabaseSync;
@@ -75,7 +76,7 @@ export function seedCore(db: OrientationDb) {
     TEAMS.forEach((team, index) => insert.run(
       `team-${team.slug}`, team.slug, team.name, team.emoji, team.color, index,
       index < 10 ? 28 : 27, team.volunteer,
-      hash(`${process.env.VOLUNTEER_TOKEN_PREFIX ?? "volunteer-demo"}-${team.slug}`),
+      hash(`${volunteerTokenPrefix()}-${team.slug}`),
       team.mystery
     ));
   }
