@@ -1,8 +1,8 @@
 {
   "version": 1,
   "mode": "demo",
-  "notes": "Change mode to approved only after all generated production assets are human-reviewed and installed.",
-  "memeReferencePattern": "generated-assets/meme-references/{teamSlug}/{templateId}.webp",
+  "notes": "Set mode to approved only after the 15 shared meme references and 20 mystery sources are installed and the puzzle tiles have been generated.",
+  "memeReferencePattern": "generated-assets/meme-references/{templateId}.webp",
   "mysterySourcePattern": "generated-assets/mysteries/{teamSlug}/source.webp",
   "puzzleTilePattern": "generated-assets/mysteries/{teamSlug}/tiles/{tileIndex}.webp",
   "privateFields": ["tileIndex", "layout"],
