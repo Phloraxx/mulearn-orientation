@@ -1,0 +1,257 @@
+{
+  "version": 1,
+  "status": "creative-brief-locked-volunteer-mapping-pending",
+  "productionHostname": "orientation.mulearnscet.in",
+  "volunteerMapping": {
+    "status": "pending-until-all-20-photos-arrive",
+    "receivedNames": [
+      "Milan",
+      "Sreehari K R",
+      "Aaron Stanphen",
+      "Hisham",
+      "Ann Rose",
+      "Christeena",
+      "Josbin",
+      "Aksa",
+      "Yadhu",
+      "Johan",
+      "Ishan Sudarshan",
+      "Ramnath",
+      "Neha"
+    ],
+    "remainingCount": 7,
+    "rule": "Do not assign animals or lock volunteer pairings until all 20 source-photo identities are available."
+  },
+  "visualRules": {
+    "memeReferences": [
+      "Participants must understand the pose within about 5 seconds.",
+      "Keep backgrounds simple and uncluttered.",
+      "No small text or captions are required for the joke to work.",
+      "No dangerous contact, lifting, jumping, lying on the floor, or intimate poses.",
+      "Volunteer faces must remain clearly recognisable.",
+      "Reference image is shown on participant phones only, never on projector."
+    ],
+    "mysterySources": [
+      "One clear absurd action per image.",
+      "Square-ish source composition, with key subjects centred enough to survive 7x4 portrait-phone cropping.",
+      "No tiny critical text, watermarks, logos, or positional clues.",
+      "Use strong silhouettes, gestures and connected visual elements across the frame so partial phone tiles remain interpretable.",
+      "Funny and surreal, but not visually chaotic or impossible to describe in one sentence.",
+      "No identifiable junior is depicted."
+    ]
+  },
+  "memeTemplates": [
+    {
+      "id": "pose-01",
+      "title": "Absolute Cinema",
+      "groupSize": 2,
+      "poseBrief": "Two volunteers stand shoulder-to-shoulder facing camera, both doing an exaggerated grand cinematic approval/admiration gesture with open arms and intensely serious expressions."
+    },
+    {
+      "id": "pose-02",
+      "title": "Pointing Spidermen",
+      "groupSize": 2,
+      "poseBrief": "Two volunteers face each other and point accusingly at each other with matching shocked expressions; no costume dependency."
+    },
+    {
+      "id": "pose-03",
+      "title": "Epic Handshake",
+      "groupSize": 2,
+      "poseBrief": "Two volunteers perform an absurdly serious dramatic handshake/arm-clasp, squared shoulders and intense eye contact."
+    },
+    {
+      "id": "pose-04",
+      "title": "Fake Slap No Contact",
+      "groupSize": 2,
+      "poseBrief": "One volunteer freezes mid-air with palm clearly stopping before the other volunteer; second volunteer leans away theatrically. The image must clearly imply zero contact."
+    },
+    {
+      "id": "pose-05",
+      "title": "Both Pointing Excitedly",
+      "groupSize": 2,
+      "poseBrief": "Both volunteers point dramatically toward the same imaginary off-screen discovery while looking wildly excited."
+    },
+    {
+      "id": "pose-06",
+      "title": "Argument Face-Off",
+      "groupSize": 2,
+      "poseBrief": "Two volunteers face each other in a theatrical argument, expressive hand gestures, exaggerated disbelief, no physical contact."
+    },
+    {
+      "id": "pose-07",
+      "title": "Bro Listen",
+      "groupSize": 2,
+      "poseBrief": "One volunteer passionately explains something with both hands while the other looks completely exhausted and deadpan."
+    },
+    {
+      "id": "pose-08",
+      "title": "Secret Then Shocked",
+      "groupSize": 2,
+      "poseBrief": "One volunteer leans in and mimes whispering a secret; the other reacts with an enormous shocked face and hands near cheeks."
+    },
+    {
+      "id": "pose-09",
+      "title": "Accused vs Innocent",
+      "groupSize": 2,
+      "poseBrief": "One volunteer points in accusation; the other points at themselves with a dramatic 'ME?' expression."
+    },
+    {
+      "id": "pose-10",
+      "title": "Fake Interview",
+      "groupSize": 2,
+      "poseBrief": "One volunteer holds an obvious imaginary microphone toward the other, who gives an absurdly serious interview answer."
+    },
+    {
+      "id": "pose-11",
+      "title": "Winner vs Devastated",
+      "groupSize": 2,
+      "poseBrief": "One volunteer celebrates like they won a championship while the other is visibly devastated with head in hands."
+    },
+    {
+      "id": "pose-12",
+      "title": "Photobomb",
+      "groupSize": 2,
+      "poseBrief": "One volunteer tries to pose seriously for a portrait while the other suddenly leans into frame making an exaggerated face."
+    },
+    {
+      "id": "pose-13",
+      "title": "Senior Gives Small Work",
+      "groupSize": 2,
+      "poseBrief": "One volunteer calmly gives instructions with a tiny pinch gesture suggesting 'small work'; the other looks horrified and begs with folded hands."
+    },
+    {
+      "id": "pose-14",
+      "title": "What Did You Do",
+      "groupSize": 2,
+      "poseBrief": "One volunteer stares at an imaginary disaster with both hands on head while the other points at them in disbelief."
+    },
+    {
+      "id": "pose-15",
+      "title": "Distracted Boyfriend Trio",
+      "groupSize": 3,
+      "poseBrief": "Three-volunteer composition inspired by the classic distracted-look triangle: centre person looks back dramatically, partner reacts in disbelief, third person walks past. Keep it playful and non-romantic in styling."
+    }
+  ],
+  "mysteries": [
+    {
+      "teamSlug": "lion",
+      "title": "Dinosaur Event Escape",
+      "action": "A senior rides away on a dinosaur while three juniors chase behind waving event registration forms.",
+      "composition": "Dinosaur and senior centre-left, chasing juniors crossing the frame from right, papers visibly flying."
+    },
+    {
+      "teamSlug": "tiger",
+      "title": "Attendance Register Chase",
+      "action": "A professor chases a student who is sprinting away clutching the attendance register like stolen treasure.",
+      "composition": "Student runs diagonally across foreground, professor behind, giant recognisable register in student's arms."
+    },
+    {
+      "teamSlug": "panda",
+      "title": "Cat Viva",
+      "action": "A very serious cat conducts an engineering viva while nervous students sit in front of it with notebooks.",
+      "composition": "Cat behind desk near centre, students facing it, one student visibly panicking."
+    },
+    {
+      "teamSlug": "zebra",
+      "title": "Printer Duel",
+      "action": "A student has a dramatic sword-fight-style duel with a college printer that refuses to print a lab record.",
+      "composition": "Printer and student on opposite sides, long sheet of paper connecting the action across the centre."
+    },
+    {
+      "teamSlug": "penguin",
+      "title": "Penguin Seminar",
+      "action": "A penguin confidently presents an engineering seminar while students in the audience take notes as if everything is normal.",
+      "composition": "Penguin at presentation board, audience spread across lower half, pointer gesture obvious."
+    },
+    {
+      "teamSlug": "fox",
+      "title": "WhatsApp Group Fisher",
+      "action": "A senior literally fishes first-years out of a giant pile of floating WhatsApp group icons using a fishing rod.",
+      "composition": "Senior on one side with rod, students tangled in oversized green chat-bubble shapes across the frame; no readable app text required."
+    },
+    {
+      "teamSlug": "monkey",
+      "title": "Assignment Time Machine",
+      "action": "A student desperately tries to enter a homemade time machine while another student points at an assignment deadline clock.",
+      "composition": "Time machine on left, deadline clock and pointing student on right, strong directional action between them."
+    },
+    {
+      "teamSlug": "elephant",
+      "title": "Lab Record Sacred Procession",
+      "action": "Students carry one lab record through campus like a sacred treasure while a faculty member runs after the procession.",
+      "composition": "Record held overhead in centre, students around it, faculty chasing from rear."
+    },
+    {
+      "teamSlug": "giraffe",
+      "title": "Canteen Reach Problem",
+      "action": "A giraffe reaches through a canteen window and steals the final plate of biriyani while students react in horror.",
+      "composition": "Long giraffe neck crosses several tile regions, plate central, students on both sides reacting."
+    },
+    {
+      "teamSlug": "koala",
+      "title": "One Working Socket",
+      "action": "A group of engineering students worships the only working power socket while a koala calmly charges a laptop from it.",
+      "composition": "Socket and koala/laptop central, students kneeling or celebrating around it."
+    },
+    {
+      "teamSlug": "bear",
+      "title": "Canteen Chef Bear",
+      "action": "A bear wearing a chef apron serves one tiny plate of food to a huge queue of extremely hungry students.",
+      "composition": "Bear behind counter, tiny plate held up, student queue extending across frame."
+    },
+    {
+      "teamSlug": "wolf",
+      "title": "Hall Ticket Surfing",
+      "action": "A student surfs through campus on an enormous hall ticket while friends run behind trying to catch them.",
+      "composition": "Oversized paper acts like surfboard across centre, student standing on it, runners trailing."
+    },
+    {
+      "teamSlug": "rabbit",
+      "title": "Deadline Sprint",
+      "action": "A rabbit in a tiny backpack races a student toward a giant glowing assignment deadline button.",
+      "composition": "Rabbit and student sprint side-by-side, destination object on opposite side of frame."
+    },
+    {
+      "teamSlug": "owl",
+      "title": "Midnight Assignment Professor",
+      "action": "An owl wearing spectacles lectures exhausted students at midnight while a wall clock dramatically shows a very late hour.",
+      "composition": "Owl near board, moon/window and large clock visible, sleepy students across foreground."
+    },
+    {
+      "teamSlug": "crocodile",
+      "title": "Final Porotta Guardian",
+      "action": "A crocodile guards the final porotta in the canteen while students attempt an overdramatic rescue mission.",
+      "composition": "Porotta plate central, crocodile guarding it, students approaching from multiple directions."
+    },
+    {
+      "teamSlug": "shark",
+      "title": "Underwater Placement Interview",
+      "action": "A shark conducts a formal placement interview underwater while a student in formal clothes tries to answer seriously.",
+      "composition": "Shark and student across a desk, bubbles and fish establish underwater setting, clear interview posture."
+    },
+    {
+      "teamSlug": "dolphin",
+      "title": "Dolphin Project Demo",
+      "action": "A dolphin demonstrates a laptop project to a panel while students proudly stand beside it.",
+      "composition": "Dolphin pointing toward laptop/project, panel opposite, students flanking."
+    },
+    {
+      "teamSlug": "parrot",
+      "title": "Timetable Leak",
+      "action": "A parrot flies through a college corridor dropping exam timetable papers while students chase below trying to catch them.",
+      "composition": "Parrot high centre, papers falling across frame, students moving underneath."
+    },
+    {
+      "teamSlug": "gorilla",
+      "title": "Broken Lab PC Rescue",
+      "action": "A gorilla carries a broken desktop computer toward technical support while relieved students follow behind.",
+      "composition": "Gorilla and computer central, loose cables visible, students following and pointing toward destination."
+    },
+    {
+      "teamSlug": "kangaroo",
+      "title": "Assignment Smuggler",
+      "action": "A kangaroo secretly stuffs stacks of assignments into its pouch while a suspicious faculty member approaches.",
+      "composition": "Kangaroo centre with obvious papers in pouch, faculty entering from side, students trying to signal warning."
+    }
+  ]
+}
