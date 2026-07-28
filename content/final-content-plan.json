@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "status": "creative-brief-locked-volunteer-mapping-pending",
+  "status": "final-content-approved-shared-memes-and-deterministic-mysteries",
   "productionHostname": "orientation.mulearnscet.in",
   "volunteerMapping": {
-    "status": "pending-until-all-20-photos-arrive",
+    "status": "physical-zone-assignment-only-not-a-software-blocker",
     "receivedNames": [
       "Milan",
       "Sreehari K R",
@@ -20,7 +20,7 @@
       "Neha"
     ],
     "remainingCount": 7,
-    "rule": "Do not assign animals or lock volunteer pairings until all 20 source-photo identities are available."
+    "rule": "The app uses fixed animal-zone volunteer credentials. Real volunteer names/photos may be assigned operationally later; they are not required for meme references or deployment."
   },
   "visualRules": {
     "memeReferences": [
@@ -43,93 +43,106 @@
   "memeTemplates": [
     {
       "id": "pose-01",
-      "title": "Absolute Cinema",
+      "title": "Spider-Man Pointing",
       "groupSize": 2,
-      "poseBrief": "Two volunteers stand shoulder-to-shoulder facing camera, both doing an exaggerated grand cinematic approval/admiration gesture with open arms and intensely serious expressions."
+      "sourcePage": "https://imgflip.com/memetemplate/374442872/Spider-Man-Pointing"
     },
     {
       "id": "pose-02",
-      "title": "Pointing Spidermen",
+      "title": "Epic Handshake",
       "groupSize": 2,
-      "poseBrief": "Two volunteers face each other and point accusingly at each other with matching shocked expressions; no costume dependency."
+      "sourcePage": "https://imgflip.com/memetemplate/Epic-Handshake"
     },
     {
       "id": "pose-03",
-      "title": "Epic Handshake",
+      "title": "Absolute Cinema",
       "groupSize": 2,
-      "poseBrief": "Two volunteers perform an absurdly serious dramatic handshake/arm-clasp, squared shoulders and intense eye contact."
+      "sourcePage": "https://imgflip.com/memetemplate/531596411/Martin-Scorsese-Absolute-Cinema",
+      "recreationNote": "Both participants can mirror the same grand approval pose side-by-side."
     },
     {
       "id": "pose-04",
-      "title": "Fake Slap No Contact",
+      "title": "Drake Hotline Bling",
       "groupSize": 2,
-      "poseBrief": "One volunteer freezes mid-air with palm clearly stopping before the other volunteer; second volunteer leans away theatrically. The image must clearly imply zero contact."
+      "sourcePage": "https://imgflip.com/memetemplate/Drake-Hotline-Bling",
+      "recreationNote": "One participant takes the reject pose and the other the approve pose."
     },
     {
       "id": "pose-05",
-      "title": "Both Pointing Excitedly",
+      "title": "Woman Yelling At Cat",
       "groupSize": 2,
-      "poseBrief": "Both volunteers point dramatically toward the same imaginary off-screen discovery while looking wildly excited."
+      "sourcePage": "https://imgflip.com/memetemplate/Woman-Yelling-At-Cat",
+      "recreationNote": "One participant is the dramatic pointer; the other recreates the unimpressed cat reaction without needing props."
     },
     {
       "id": "pose-06",
-      "title": "Argument Face-Off",
+      "title": "Two Buttons",
       "groupSize": 2,
-      "poseBrief": "Two volunteers face each other in a theatrical argument, expressive hand gestures, exaggerated disbelief, no physical contact."
+      "sourcePage": "https://imgflip.com/memetemplate/Two-Buttons",
+      "recreationNote": "One acts as the panicked decision-maker; the other presents two imaginary options/buttons."
     },
     {
       "id": "pose-07",
-      "title": "Bro Listen",
+      "title": "Running Away Balloon",
       "groupSize": 2,
-      "poseBrief": "One volunteer passionately explains something with both hands while the other looks completely exhausted and deadpan."
+      "sourcePage": "https://imgflip.com/memetemplate/Running-Away-Balloon",
+      "recreationNote": "One reaches dramatically toward an imaginary goal while the other holds/pulls them back."
     },
     {
       "id": "pose-08",
-      "title": "Secret Then Shocked",
+      "title": "American Chopper Argument",
       "groupSize": 2,
-      "poseBrief": "One volunteer leans in and mimes whispering a secret; the other reacts with an enormous shocked face and hands near cheeks."
+      "sourcePage": "https://imgflip.com/memetemplate/205958458/American-Chopper-Argument-2-Panel",
+      "recreationNote": "Theatrical argument only; no physical contact."
     },
     {
       "id": "pose-09",
-      "title": "Accused vs Innocent",
+      "title": "Change My Mind",
       "groupSize": 2,
-      "poseBrief": "One volunteer points in accusation; the other points at themselves with a dramatic 'ME?' expression."
+      "sourcePage": "https://imgflip.com/memetemplate/Change-My-Mind",
+      "recreationNote": "One gives the confident seated/leaning pose; the other acts as the sceptical challenger."
     },
     {
       "id": "pose-10",
-      "title": "Fake Interview",
+      "title": "Surprised Pikachu",
       "groupSize": 2,
-      "poseBrief": "One volunteer holds an obvious imaginary microphone toward the other, who gives an absurdly serious interview answer."
+      "sourcePage": "https://imgflip.com/memetemplate/Surprised-Pikachu",
+      "recreationNote": "Both participants perform exaggerated shocked reaction faces together."
     },
     {
       "id": "pose-11",
-      "title": "Winner vs Devastated",
+      "title": "Disaster Girl",
       "groupSize": 2,
-      "poseBrief": "One volunteer celebrates like they won a championship while the other is visibly devastated with head in hands."
+      "sourcePage": "https://imgflip.com/memetemplate/Disaster-Girl",
+      "recreationNote": "One gives the suspiciously satisfied look while the other acts as the imaginary disaster/reacting witness."
     },
     {
       "id": "pose-12",
-      "title": "Photobomb",
+      "title": "UNO Draw 25",
       "groupSize": 2,
-      "poseBrief": "One volunteer tries to pose seriously for a portrait while the other suddenly leans into frame making an exaggerated face."
+      "sourcePage": "https://imgflip.com/memetemplate/UNO-Draw-25-Cards",
+      "recreationNote": "One refuses an imaginary choice; the other dramatically presents the choice/card pile."
     },
     {
       "id": "pose-13",
-      "title": "Senior Gives Small Work",
+      "title": "Is This A Pigeon",
       "groupSize": 2,
-      "poseBrief": "One volunteer calmly gives instructions with a tiny pinch gesture suggesting 'small work'; the other looks horrified and begs with folded hands."
+      "sourcePage": "https://imgflip.com/memetemplate/Is-This-A-Pigeon",
+      "recreationNote": "One points at an imaginary object in total confusion; the other acts as the object/reaction partner."
     },
     {
       "id": "pose-14",
-      "title": "What Did You Do",
+      "title": "Leonardo DiCaprio Cheers",
       "groupSize": 2,
-      "poseBrief": "One volunteer stares at an imaginary disaster with both hands on head while the other points at them in disbelief."
+      "sourcePage": "https://imgflip.com/memetemplate/Leonardo-Dicaprio-Cheers",
+      "recreationNote": "Both participants perform an exaggerated celebratory toast gesture using empty hands only."
     },
     {
       "id": "pose-15",
-      "title": "Distracted Boyfriend Trio",
+      "title": "Distracted Boyfriend",
       "groupSize": 3,
-      "poseBrief": "Three-volunteer composition inspired by the classic distracted-look triangle: centre person looks back dramatically, partner reacts in disbelief, third person walks past. Keep it playful and non-romantic in styling."
+      "sourcePage": "https://imgflip.com/memetemplate/Distracted-Boyfriend",
+      "recreationNote": "Classic three-person look-back composition; keep it playful and non-romantic."
     }
   ],
   "mysteries": [

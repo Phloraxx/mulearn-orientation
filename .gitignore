@@ -11,3 +11,6 @@ generated-assets/
 !content/generated-assets/**
 coverage/
 *.sqlite*
+content/generated-assets/mysteries/
+!content/generated-assets/meme-references/
+!content/generated-assets/meme-references/*.webp

@@ -21,7 +21,8 @@
     "content:validate": "node --import tsx scripts/validate-content.ts",
     "content:tiles": "node --import tsx scripts/generate-tiles.ts",
     "test:content-fixture": "node --import tsx scripts/create-approved-test-fixture.ts",
-    "simulate:550": "node --import tsx scripts/simulate-550.ts"
+    "simulate:550": "node --import tsx scripts/simulate-550.ts",
+    "content:mysteries": "node --import tsx scripts/generate-mysteries.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.1",

@@ -9,7 +9,7 @@ This repository is the single source of truth for the game design, implementatio
 The experience has three connected phases:
 
 1. **Find Your Animal** — every junior scans one public QR code, enters their name, receives a balanced random animal team, finds that team's fixed physical zone, and is checked in by that team's pre-selected volunteer.
-2. **Meme Recreation** — juniors are paired/trio-assigned meme poses featuring the real µLearn/Sahrdaya volunteers in AI-generated reference images. The team volunteer photographs recreations. Captured photos immediately join an adaptive, never-ending projector slideshow. There is no scoring or judging.
+2. **Meme Recreation** — juniors are paired/trio-assigned one of 15 shared internet meme reference cards. The team volunteer photographs recreations. Captured photos immediately join an adaptive, never-ending projector slideshow. There is no scoring or judging.
 3. **Manglish Match + Mystery Puzzle** — half the team receives sarcastic/funny Manglish questions and the other half matching answers. When a valid pair enters the answer-holder's key, **both phones immediately glitch into separate puzzle pieces**. Pieces are placed on the floor and arranged while other team members are still pairing. The team may submit a description of the mystery action at any time; they do not need to unlock every piece first.
 
 There is intentionally **no overall leaderboard**. Projector views show live progress and entertainment, not competitive ranking.
@@ -36,10 +36,7 @@ The approved structure is **15 reusable reference templates**:
 
 A 28-person team uses all 14 pair cards. A 27-person team uses 12 pair cards + the trio card. Every reference within a team is unique so finding someone with the same image unambiguously identifies the meme partner/group.
 
-Each template has a human-approved, team-specific generated render featuring
-that team's fixed volunteer, produced **before** the event. The resulting 300
-runtime files are shown on participant phones only; the projector shows only the
-juniors' captured recreations.
+The same 15 approved reference images are reused across all 20 teams. Because students only search inside their fixed animal team, the shared references remain unambiguous. Reference images are shown on participant phones only; the projector shows only the juniors' captured recreations.
 
 See [`docs/MEME_REFERENCE_PLAN.md`](docs/MEME_REFERENCE_PLAN.md).
 

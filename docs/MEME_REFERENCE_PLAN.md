@@ -1,382 +1,57 @@
-# Meme Reference Image Plan
+# Meme Reference Plan — Final
 
-## Final content-bank size
+## Final model
 
-Prepare exactly **15 reusable meme-reference templates** for the event:
+The live event uses **15 shared reference images** across all 20 animal teams:
 
-- **14 two-person reference images**
-- **1 three-person reference image**
+- 14 two-person references
+- 1 three-person reference
 
-This maps cleanly to team sizes:
+A 28-person team receives all 14 pair references once each. A 27-person team receives 12 pair references plus the trio. Students only search inside their fixed animal zone, so reusing the same 15 references across teams is unambiguous.
 
-### 28-person team
+Volunteer faces are **not** required in meme references. This removes the old 300-image team-specific generation requirement and makes the event much easier to prepare and validate.
 
-Use all 14 pair references:
+## Approved bank
+
+1. Spider-Man Pointing
+2. Epic Handshake
+3. Absolute Cinema
+4. Drake Hotline Bling
+5. Woman Yelling At Cat
+6. Two Buttons
+7. Running Away Balloon
+8. American Chopper Argument
+9. Change My Mind
+10. Surprised Pikachu
+11. Disaster Girl
+12. UNO Draw 25
+13. Is This A Pigeon
+14. Leonardo DiCaprio Cheers
+15. Distracted Boyfriend — trio
+
+Source-page attribution and recreation notes live in `content/internet-meme-sources.json`.
+
+## Runtime files
+
+The approved files are stored once:
 
 ```text
-14 × 2 = 28 participants
+content/generated-assets/meme-references/pose-01.webp
+...
+content/generated-assets/meme-references/pose-15.webp
 ```
 
-Each reference appears exactly once inside that team, so a student can identify their partner simply by finding the person displaying the same image.
+The participant endpoint remains authenticated and only exposes the reference assigned to that participant during Meme mode. The projector never displays these source references; it displays only juniors' captured recreations.
 
-### 27-person team
+## Recreation rules
 
-Use 12 of the pair references plus the trio reference:
+- easy to understand in roughly five seconds
+- no dangerous contact, lifting, jumping or lying on the floor
+- no intimate pose requirement
+- props should be mime-able with empty hands
+- reference should remain readable on a phone screen
+- one unique reference per meme group inside each team
 
-```text
-12 × 2 + 1 × 3 = 27 participants
-```
+## Copyright/source policy
 
-Randomly choose which two pair references are omitted so different odd-sized teams do not necessarily have the exact same subset.
-
-The same approved 15-template composition bank is reused across all 20 teams.
-Production still contains a team-specific generated render for every
-team/template combination (300 files), so the participant endpoint can always
-show the relevant fixed team volunteer.
-
----
-
-# Volunteer-photo concept
-
-The reference images should feature the **pre-selected µLearn/Sahrdaya volunteers**, not anonymous models.
-
-The organiser is providing volunteer source photos in a Google Drive folder. More photos are still expected.
-
-Current source-photo inventory inspected on 2026-07-28 contains eight named volunteers:
-
-1. Milan
-2. Sreehari K R
-3. Aaron Stanphen
-4. Hisham
-5. Ann Rose
-6. Christeena
-7. Josbin
-8. Aksa
-
-All eight current photos are usable identity references. They are mostly clean portrait/half-body sources with visible faces, suitable for identity-preserving generation into new full/half-body compositions.
-
-Do not commit the raw volunteer source photographs to this public repository by default.
-
----
-
-# How volunteers should appear in references
-
-Each team's render must feature that team's own fixed volunteer recognisably in
-at least one prominent role. Additional roles may use other approved volunteers,
-but must not make the team identity ambiguous. The humour depends on juniors
-recognising the volunteer who is physically waiting in their animal zone.
-
-The 15 compositions are shared; the rendered identity assets are team-scoped.
-Human review must approve all 15 renders for every team before the manifest is
-set to production `approved` mode.
-
----
-
-# Generation design rules
-
-Every generated reference must prioritise **recreatability in a crowded orientation hall**.
-
-The participant should be able to understand the pose within a few seconds.
-
-Hard rules:
-
-- 2 people for pair cards; exactly 3 people for the trio card
-- pose/body-language is the joke, not tiny text
-- no required captions to understand the scene
-- avoid complicated backgrounds
-- avoid props wherever possible
-- if a prop exists, it should be easy to mime with empty hands
-- avoid lying on the floor
-- avoid jumping/running
-- avoid lifting/carrying another person
-- avoid intimate/couple poses that could make strangers uncomfortable
-- avoid dangerous simulated fighting; slap/fight memes must clearly be **freeze-frame acting with no contact**
-- keep full bodies or at least enough torso/arm visibility to copy the pose
-- high contrast and immediately readable on a phone screen
-- preferably consistent 4:5 portrait orientation
-- generated volunteer identity should remain recognisable
-- no offensive/humiliating transformations
-
-Students should be able to recreate a card in roughly **10–20 seconds of posing** once they find their partner.
-
----
-
-# Proposed 14 pair-reference cards
-
-The list deliberately mixes recognisable classic meme compositions with original meme-style poses that are extremely easy for strangers to recreate.
-
-## 01 — Spider-Men Pointing
-
-**Composition:** Two volunteers standing face-to-face, both dramatically pointing at each other like the Spider-Man pointing meme.
-
-Why it works:
-
-- instantly recognisable
-- zero props
-- no physical contact
-- very easy to photograph
-
-Generation note: volunteer clothing/identity can remain recognisable while borrowing only the iconic pointing composition.
-
----
-
-## 02 — Epic Handshake
-
-**Composition:** Two volunteers doing an exaggerated dramatic handshake/flex inspired by the classic epic-handshake meme.
-
-Why it works:
-
-- simple
-- recognisable silhouette
-- very fast
-
-Safety: ordinary handshake only; no arm wrestling/pulling.
-
----
-
-## 03 — Fake Batman Slap
-
-**Composition:** One volunteer has a theatrical raised-hand/slap pose while the other reacts dramatically, based on the Batman/Robin meme composition.
-
-Why it works:
-
-- visually obvious
-- funny facial acting
-
-Critical: the generated image and participant instruction should make it clear that this is a **freeze-frame with no contact**.
-
----
-
-## 04 — Absolute Cinema Duo
-
-**Composition:** Two volunteers standing beside each other doing an exaggerated "Absolute Cinema" arms-raised presentation pose.
-
-Why it works:
-
-- already familiar to the organisers
-- absurd when duplicated as a duo
-- zero props/contact
-
----
-
-## 05 — Two Excited Pointers
-
-**Composition:** Two volunteers side by side, mouths open, excitedly pointing at something off-camera in the style of the famous two-pointing reaction meme/soyjak composition.
-
-Why it works:
-
-- extremely easy
-- facial expressions make each recreation different
-- no props/contact
-
----
-
-## 06 — Argument Face-Off
-
-**Composition:** Two volunteers facing each other in an exaggerated meme argument: one pointing dramatically, the other throwing hands up in disbelief.
-
-Inspired by two-person argument formats such as the American Chopper reaction meme, but presented as one clear still image.
-
-Why it works:
-
-- no props
-- no contact
-- students can exaggerate it freely
-
----
-
-## 07 — "Bro Listen" Explanation
-
-**Composition:** One volunteer passionately explaining something with both hands while the second volunteer looks exhausted/confused.
-
-Inspired by viral "let me explain" / club-explanation meme photography.
-
-Why it works:
-
-- natural college energy
-- facial-expression heavy
-- very easy to recreate
-
----
-
-## 08 — Secret → Shock
-
-**Composition:** One volunteer leans slightly toward the other as if whispering a massive secret; the listener reacts with an absurd shocked expression.
-
-Why it works:
-
-- original but immediately readable
-- minimal body contact (none required)
-- excellent for funny student faces
-
-Do not make them physically whisper into the other person's ear; maintain comfortable spacing.
-
----
-
-## 09 — Accused vs Innocent
-
-**Composition:** One volunteer points accusingly at the second; the second has both hands raised with an exaggerated "ME?!" expression.
-
-Why it works:
-
-- clear story from one frame
-- zero props
-- no contact
-
----
-
-## 10 — Fake Interview
-
-**Composition:** One volunteer acts like an over-serious interviewer holding an imaginary microphone; the other gives an absurdly confident answer/pose.
-
-Why it works:
-
-- students can mime the microphone
-- no real prop required
-- allows expressive recreations
-
----
-
-## 11 — Winner vs Disaster
-
-**Composition:** One volunteer celebrates wildly with arms raised while the other stands beside them looking completely devastated.
-
-Why it works:
-
-- strong contrast
-- extremely simple
-- no props/contact
-
-Can be styled like "results came out" without adding text.
-
----
-
-## 12 — Camera Block / Photobomb
-
-**Composition:** One volunteer attempts a serious photo pose while the second dramatically photobombs/blocks them from the side.
-
-Why it works:
-
-- directly relates to photography
-- easy standing pose
-- recreations will naturally vary and be funny
-
-Do not require touching or grabbing the other participant.
-
----
-
-## 13 — Senior Scolding / Junior Praying
-
-**Composition:** One volunteer poses like an overly dramatic senior giving instructions while the second does a folded-hands "please bro" reaction.
-
-Why it works:
-
-- college-specific humour
-- instantly understandable without text
-- low-contact and easy
-
-This should remain playful and not depict actual humiliation.
-
----
-
-## 14 — "What Did You Do?!"
-
-**Composition:** One volunteer stares at an imaginary disaster off-frame with hands on head; the second points at them with a shocked/blaming expression.
-
-Why it works:
-
-- strong readable silhouette
-- no prop/contact
-- can produce ridiculous recreations
-
----
-
-# Trio reference card
-
-## 15 — Distracted Boyfriend
-
-**Composition:** Three volunteers recreate the recognisable three-person distracted-boyfriend body positions: one person turning to look back, one companion reacting, and one passer-by/look target.
-
-Why it works:
-
-- iconic three-person structure
-- exactly solves the odd 27-person team grouping problem
-- requires no prop
-
-Generation/recreation should maintain comfortable spacing and avoid making the pose overly romantic/intimate.
-
----
-
-# Alternate / reserve concepts
-
-If any proposed reference generates poorly, swap it before event day rather than trying to fix it live.
-
-Reserve options:
-
-- two-person dramatic courtroom accusation
-- one person covering ears while the other "shouts"
-- one person pointing to an imaginary presentation while the other looks unimpressed
-- dramatic high-five freeze-frame
-- one person showing an imaginary phone while the other reacts in horror
-- one person posing proudly while the other facepalms
-
-The reserve poses follow the same no-prop/no-contact/fast-recreation principles.
-
----
-
-# AI generation workflow
-
-The 15 templates and their 300 team-specific renders are **pre-event assets**.
-
-Suggested process once all volunteer photos are available:
-
-1. Load the 20 fixed team-volunteer identity references.
-2. For every team, generate all 15 compositions with that team's volunteer in a
-   prominent, recognisable role.
-3. Keep body language clear and the background simple.
-4. Check identity recognisability.
-5. Check whether a student pair can understand the pose on a phone in <5 seconds.
-6. Reject/regenerate images with extra limbs, unclear hands, impossible poses, confusing scene geometry, or excessive background clutter.
-7. Export consistent 4:5 mobile-friendly files (e.g. WebP/JPEG around 1200–1600 px long edge).
-8. Install every approved render at the documented
-   `meme-references/{teamSlug}/{templateId}.webp` path.
-9. Keep original volunteer source files private/outside git.
-
-The production application must never require live AI generation.
-
----
-
-# µLearn Sahrdaya branding source
-
-Reuse branding from the organiser's existing repository:
-
-> `Phloraxx/MuLearn-Scet-Webpage`
-
-Useful existing elements:
-
-- reusable inline `MuLearnLogo` SVG component
-- official campus site presentation pattern
-- existing µLearn Sahrdaya colour palette
-
-Current palette used by that project:
-
-```text
-Pakistan Green  #283618
-Dark Moss Green #606c38
-Cornsilk        #fefae0
-Earth Yellow    #dda15e
-Tiger's Eye     #bc6c25
-```
-
-The orientation app should feel related to the current µLearn Sahrdaya site but can be more playful/game-like. Reuse the logo and palette rather than inventing a separate brand.
-
----
-
-# Current status
-
-- Domain confirmed: `orientation.mulearnscet.in`
-- 15-reference structure confirmed: 14 pair + 1 trio
-- 8 volunteer source photos currently available and inspected
-- more volunteer photos expected
-- all 300 team/template renders must be reviewed after the volunteer-photo set is complete
-- branding source repository identified
+The repository records third-party source-page attribution. The local reference cards are event assets used only to guide pose recreation. They should not be marketed or redistributed as an original meme-template library.
