@@ -52,6 +52,11 @@ export class AssetStore {
     return !isProduction(this.env);
   }
 
+  /**
+   * Meme references are shared across all teams. `teamSlug` is retained in the
+   * signature for backwards compatibility with existing call sites; the approved
+   * manifest intentionally omits {teamSlug} from memeReferencePattern.
+   */
   memeReference(teamSlug: string, templateId: string) {
     return this.resolveAsset("memeReferencePattern", { teamSlug, templateId });
   }
@@ -74,12 +79,15 @@ export class AssetStore {
     if (this.manifest?.mode !== "approved") {
       return ["asset-manifest.json must set mode=approved in production"];
     }
-    for (const team of TEAMS) {
-      for (const template of MEME_TEMPLATES) {
-        if (!this.memeReference(team.slug, template.id)) {
-          errors.push(`Missing meme reference: ${team.slug}/${template.id}`);
-        }
+
+    // Only 15 shared meme assets are required, not 20×15 team copies.
+    for (const template of MEME_TEMPLATES) {
+      if (!this.memeReference(TEAMS[0].slug, template.id)) {
+        errors.push(`Missing shared meme reference: ${template.id}`);
       }
+    }
+
+    for (const team of TEAMS) {
       if (!this.mysterySource(team.slug)) errors.push(`Missing mystery source: ${team.slug}`);
       for (let index = 0; index < 28; index++) {
         if (!this.puzzleTile(team.slug, index)) {
