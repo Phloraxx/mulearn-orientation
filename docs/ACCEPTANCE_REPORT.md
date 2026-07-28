@@ -60,7 +60,7 @@ The representative in-process concurrency simulation completed with:
   "detectives": 10,
   "simulatedSseClients": 573,
   "eventDeliveries": 952326,
-  "elapsedMs": 264
+  "elapsedMs": 427
 }
 ```
 
