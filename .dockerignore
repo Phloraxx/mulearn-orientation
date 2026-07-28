@@ -1,0 +1,13 @@
+.git
+.github
+node_modules
+dist-client
+dist-server
+data
+generated-assets
+content-input
+coverage
+.env
+*.sqlite*
+docs
+outputs

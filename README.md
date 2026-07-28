@@ -61,3 +61,136 @@ The projector is an enhancement, not a dependency: participant gameplay must con
 5. Branding assets (µLearn SCET logo/event artwork), if there is a required visual identity.
 
 The application should remain fully testable before those assets arrive by using obvious placeholders and seeded demo data.
+
+## Implemented application
+
+The repository now contains the production single-service application:
+
+- React/Vite mobile UI for participant join/restore and current phase
+- fixed-team volunteer scanner, camera capture queue, and early theory submission
+- host phase/timer/reveal console
+- fixed-order projector assembly/mystery grids and adaptive endless meme slideshow
+- technical recovery admin for search, check-in, absence, device recovery, safe reassignment, Q&A regeneration, and media reset
+- Hono HTTP/SSE server backed by SQLite WAL
+- controlled persistent media storage under `/data/media`
+- deterministic placeholder meme and mystery assets
+- content validation, puzzle tile generation, demo seed, and 550-participant simulation
+- multi-stage production Docker image
+
+Participant identity is an opaque HttpOnly-cookie session; the personal QR contains
+only a separate opaque scan token. Staff bootstrap links exchange their URL token
+for a time-limited HttpOnly staff session.
+
+## Local development
+
+Node 22.12+ and pnpm 11.9 are required (Node 24 is used by the production image).
+
+```bash
+corepack enable
+pnpm install
+pnpm dev
+```
+
+Vite can be run separately on port 5173 with `pnpm dev:client`; it proxies the API
+to the server on port 3000.
+
+Useful checks:
+
+```bash
+pnpm content:validate
+pnpm test
+pnpm lint
+pnpm build
+pnpm simulate:550
+```
+
+The safe demo reset deliberately refuses to run unless `DEMO_MODE=1` and
+`NODE_ENV` is not `production`.
+
+## Placeholder content workflow
+
+Raw volunteer photos go under the gitignored `content-input/volunteers/<team>/`
+tree. `content/asset-manifest.json` documents the reviewed output contract.
+`pnpm content:tiles` generates deterministic 7×4 development sources and 28
+portrait tiles per team under `generated-assets/`; tile coordinates stay in
+private manifests and are never sent through participant APIs.
+
+The runtime SVG stand-ins keep every game flow usable until the organiser supplies
+real volunteer photos. AI generation is an optional pre-event asset step only.
+
+## Production environment
+
+Copy `.env.example` into the Dokploy environment and replace every placeholder
+with an independently generated random value:
+
+```bash
+openssl rand -base64 36
+```
+
+Production startup refuses weak/missing staff and session configuration. The
+container contract is:
+
+```text
+port: 3000
+database: /data/orientation.sqlite
+captures: /data/media/event-main
+volume: /data
+```
+
+The first start seeds exactly 20 fixed animal teams and volunteer slots.
+After the persistent volume exists, run this once inside the app container to
+rotate/provision the fixed volunteer credentials and print all private links:
+
+```bash
+node dist-server/server/provision-access.js
+```
+
+Do not share host/admin/projector links with participants.
+
+## Dokploy + Traefik deployment
+
+1. Create one Dokploy application from
+   `https://github.com/Phloraxx/mulearn-orientation`.
+2. Select Dockerfile build, repository root context, and internal port `3000`.
+3. Attach a named persistent volume such as `orientation-data` at `/data`.
+4. Add every variable from `.env.example`, using strong unique values. Keep
+   `SITE_URL=https://orientation.mulearnscet.in`.
+5. Configure the Dokploy domain `orientation.mulearnscet.in`, enable HTTPS, and
+   route every path to this one service.
+6. Ensure Traefik response buffering is disabled for `text/event-stream` and the
+   idle timeout is above 30 seconds. The app emits 15-second SSE heartbeats and
+   every client fetches an authoritative snapshot after reconnect.
+7. Deploy and wait for both `/health` and `/ready` to return HTTP 200.
+8. Run `node dist-server/server/provision-access.js` in the running container and distribute the 20
+   resulting volunteer links plus the host/admin/projector links privately.
+9. Run `pnpm content:validate`, `pnpm test`, and `pnpm simulate:550` against the
+   release commit before opening registration.
+10. Verify persistence by joining one test participant, restarting the container,
+    confirming restoration, and deleting/deactivating that test record in Admin.
+11. Create the `orientation` DNS record to the existing Dokploy/Traefik ingress.
+    Do not alter the root domain or other subdomains.
+12. Snapshot `/data/orientation.sqlite`, `/data/orientation.sqlite-wal` when
+    applicable, final manifests, and media content after the dress rehearsal.
+
+For a local container rehearsal:
+
+```bash
+cp .env.example .env
+# replace every secret first
+docker compose up --build
+curl -fsS http://localhost:3000/ready
+```
+
+## Event access patterns
+
+The provision command prints exact links following these patterns:
+
+```text
+https://orientation.mulearnscet.in/volunteer/lion?t=<private-team-token>
+https://orientation.mulearnscet.in/host?t=<host-secret>
+https://orientation.mulearnscet.in/admin?t=<admin-secret>
+https://orientation.mulearnscet.in/projector?t=<projector-secret>
+```
+
+After successful bootstrap the query secret is removed from browser history and a
+time-limited HttpOnly cookie is used.

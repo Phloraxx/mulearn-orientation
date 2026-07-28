@@ -1,0 +1,8 @@
+{
+  "provider": "optional-pre-event-adapter",
+  "enabled": false,
+  "inputRoot": "content-input/volunteers",
+  "outputRoot": "generated-assets/meme-references",
+  "instructions": "Preserve the volunteer identity, make the pose easy for a pair or trio to copy, keep it orientation-safe, and do not add tiny text.",
+  "humanReviewRequired": true
+}

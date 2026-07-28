@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "mode": "placeholder",
+  "notes": "Deterministic SVG stand-ins are served until reviewed final assets are installed.",
+  "memeReferencePattern": "generated-assets/meme-references/{teamSlug}/{templateId}.webp",
+  "mysterySourcePattern": "generated-assets/mysteries/{teamSlug}/source.webp",
+  "puzzleTilePattern": "generated-assets/mysteries/{teamSlug}/tiles/{tileIndex}.webp",
+  "privateFields": ["tileIndex", "layout"],
+  "runtimeCaptureDirectory": "/data/media/event-main"
+}

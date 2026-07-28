@@ -1,0 +1,11 @@
+node_modules/
+dist-client/
+dist-server/
+.env
+.DS_Store
+data/
+content-input/*
+!content-input/README.md
+generated-assets/
+coverage/
+*.sqlite*
