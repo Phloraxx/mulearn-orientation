@@ -36,6 +36,9 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Generate final mystery assets
+        run: pnpm content:mysteries && pnpm content:tiles
+
       - name: Validate content
         run: pnpm content:validate
 

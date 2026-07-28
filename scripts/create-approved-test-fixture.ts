@@ -12,7 +12,7 @@ const manifest = {
   version: 1,
   mode: "approved",
   notes: "TEST FIXTURE ONLY. Never deploy as event content.",
-  memeReferencePattern: "generated-assets/meme-references/{teamSlug}/{templateId}.webp",
+  memeReferencePattern: "generated-assets/meme-references/{templateId}.webp",
   mysterySourcePattern: "generated-assets/mysteries/{teamSlug}/source.webp",
   puzzleTilePattern: "generated-assets/mysteries/{teamSlug}/tiles/{tileIndex}.webp",
   privateFields: ["tileIndex", "layout"],
@@ -25,12 +25,13 @@ const fixtureImage = await sharp({
   create: { width: 64, height: 64, channels: 3, background: "#7c3aed" }
 }).webp().toBuffer();
 
+for (const template of MEME_TEMPLATES) {
+  const path = resolve(root, "generated-assets", "meme-references", `${template.id}.webp`);
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, fixtureImage);
+}
+
 for (const team of TEAMS) {
-  for (const template of MEME_TEMPLATES) {
-    const path = resolve(root, "generated-assets", "meme-references", team.slug, `${template.id}.webp`);
-    await mkdir(dirname(path), { recursive: true });
-    await writeFile(path, fixtureImage);
-  }
   const mysteryRoot = resolve(root, "generated-assets", "mysteries", team.slug);
   await mkdir(resolve(mysteryRoot, "tiles"), { recursive: true });
   await writeFile(resolve(mysteryRoot, "source.webp"), fixtureImage);

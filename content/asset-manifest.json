@@ -1,10 +1,13 @@
 {
   "version": 1,
-  "mode": "demo",
-  "notes": "Change mode to approved only after all generated production assets are human-reviewed and installed.",
-  "memeReferencePattern": "generated-assets/meme-references/{teamSlug}/{templateId}.webp",
+  "mode": "approved",
+  "notes": "Approved event content. Fifteen shared meme references are committed; twenty original mystery sources and all 560 phone tiles are deterministically generated during CI/Docker build.",
+  "memeReferencePattern": "generated-assets/meme-references/{templateId}.webp",
   "mysterySourcePattern": "generated-assets/mysteries/{teamSlug}/source.webp",
   "puzzleTilePattern": "generated-assets/mysteries/{teamSlug}/tiles/{tileIndex}.webp",
-  "privateFields": ["tileIndex", "layout"],
+  "privateFields": [
+    "tileIndex",
+    "layout"
+  ],
   "runtimeCaptureDirectory": "/data/media/event-main"
 }

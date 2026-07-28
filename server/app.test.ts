@@ -33,7 +33,7 @@ function makeAssetRoot(mode: "demo" | "approved" = "approved") {
   writeFileSync(join(root, "asset-manifest.json"), JSON.stringify({
     version: 1,
     mode,
-    memeReferencePattern: "generated-assets/meme-references/{teamSlug}/{templateId}.webp",
+    memeReferencePattern: "generated-assets/meme-references/{templateId}.webp",
     mysterySourcePattern: "generated-assets/mysteries/{teamSlug}/source.webp",
     puzzleTilePattern: "generated-assets/mysteries/{teamSlug}/tiles/{tileIndex}.webp"
   }));
@@ -130,7 +130,7 @@ describe("HTTP authorization", () => {
     `).get() as { template_id: string };
 
     const approvedRoot = makeAssetRoot();
-    put(approvedRoot, `generated-assets/meme-references/lion/${assignment.template_id}.webp`, "approved-meme");
+    put(approvedRoot, `generated-assets/meme-references/${assignment.template_id}.webp`, "approved-meme");
     const approved = createApp(db, { assets: new AssetStore(approvedRoot, { NODE_ENV: "development" }) });
     const generatedResponse = await approved.app.request("/api/participant/meme-reference", {
       headers: { Cookie: "participant_session=meme-session-a" }

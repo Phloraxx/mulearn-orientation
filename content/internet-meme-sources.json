@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "mode": "internet-templates",
+  "notes": "Use existing internet meme templates as participant reference images instead of AI-generated volunteer likenesses. Keep third-party source-page attribution here; final binary assets should be reviewed before public-repo inclusion.",
+  "templates": [
+    {"id":"pose-01","title":"Spider-Man Pointing","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/374442872/Spider-Man-Pointing"},
+    {"id":"pose-02","title":"Epic Handshake","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Epic-Handshake"},
+    {"id":"pose-03","title":"Absolute Cinema","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/531596411/Martin-Scorsese-Absolute-Cinema","recreationNote":"Both participants can mirror the same grand approval pose side-by-side."},
+    {"id":"pose-04","title":"Drake Hotline Bling","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Drake-Hotline-Bling","recreationNote":"One participant takes the reject pose and the other the approve pose."},
+    {"id":"pose-05","title":"Woman Yelling At Cat","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Woman-Yelling-At-Cat","recreationNote":"One participant is the dramatic pointer; the other recreates the unimpressed cat reaction without needing props."},
+    {"id":"pose-06","title":"Two Buttons","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Two-Buttons","recreationNote":"One acts as the panicked decision-maker; the other presents two imaginary options/buttons."},
+    {"id":"pose-07","title":"Running Away Balloon","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Running-Away-Balloon","recreationNote":"One reaches dramatically toward an imaginary goal while the other holds/pulls them back."},
+    {"id":"pose-08","title":"American Chopper Argument","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/205958458/American-Chopper-Argument-2-Panel","recreationNote":"Theatrical argument only; no physical contact."},
+    {"id":"pose-09","title":"Change My Mind","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Change-My-Mind","recreationNote":"One gives the confident seated/leaning pose; the other acts as the sceptical challenger."},
+    {"id":"pose-10","title":"Surprised Pikachu","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Surprised-Pikachu","recreationNote":"Both participants perform exaggerated shocked reaction faces together."},
+    {"id":"pose-11","title":"Disaster Girl","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Disaster-Girl","recreationNote":"One gives the suspiciously satisfied look while the other acts as the imaginary disaster/reacting witness."},
+    {"id":"pose-12","title":"UNO Draw 25","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/UNO-Draw-25-Cards","recreationNote":"One refuses an imaginary choice; the other dramatically presents the choice/card pile."},
+    {"id":"pose-13","title":"Is This A Pigeon","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Is-This-A-Pigeon","recreationNote":"One points at an imaginary object in total confusion; the other acts as the object/reaction partner."},
+    {"id":"pose-14","title":"Leonardo DiCaprio Cheers","groupSize":2,"sourcePage":"https://imgflip.com/memetemplate/Leonardo-Dicaprio-Cheers","recreationNote":"Both participants perform an exaggerated celebratory toast gesture using empty hands only."},
+    {"id":"pose-15","title":"Distracted Boyfriend","groupSize":3,"sourcePage":"https://imgflip.com/memetemplate/Distracted-Boyfriend","recreationNote":"Classic three-person look-back composition; keep it playful and non-romantic."}
+  ]
+}

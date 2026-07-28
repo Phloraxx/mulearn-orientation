@@ -5,7 +5,7 @@ RUN corepack enable && corepack prepare pnpm@11.9.0 --activate
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 COPY . .
-RUN pnpm build && pnpm prune --prod
+RUN pnpm content:mysteries && pnpm content:tiles && pnpm content:validate && pnpm build && pnpm prune --prod
 
 FROM node:24-bookworm-slim AS runtime
 WORKDIR /app
