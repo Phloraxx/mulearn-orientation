@@ -33,24 +33,24 @@ const definitions: Array<[string, string, string, string]> = [
 const mysteries = [
   "A senior escapes on a dinosaur while juniors chase with event forms.",
   "A professor chases a student carrying the attendance register.",
-  "A cat teaches engineering while the professor sleeps at a desk.",
-  "Seniors carry a student like royalty into a college event.",
-  "A student proposes to biriyani while friends celebrate.",
-  "A lab record is carried like sacred treasure through a chase.",
-  "A robot begs a student to stop submitting assignments at midnight.",
-  "A penguin conducts a viva while students hide under desks.",
-  "A giant calculator runs away from an engineering exam.",
-  "A student surfs across campus on a giant hall ticket.",
-  "A faculty member races an auto carrying late students.",
-  "A group worships the one working college power socket.",
-  "A dinosaur checks attendance while students climb through a window.",
-  "A senior fishes freshers out of seven WhatsApp groups.",
-  "A student duels a printer that refuses to print the record.",
+  "A cat conducts an engineering viva while nervous students take notes.",
+  "A student duels a printer that refuses to print the lab record.",
+  "A penguin confidently presents an engineering seminar to students.",
+  "A senior fishes freshers out of a giant pile of WhatsApp groups.",
+  "A student tries to enter a time machine before the assignment deadline.",
+  "Students carry one lab record through campus like sacred treasure.",
+  "A giraffe steals the final plate of biriyani through a canteen window.",
+  "Students worship the only working socket while a koala charges a laptop.",
+  "A bear chef serves one tiny plate to a huge queue of hungry students.",
+  "A student surfs across campus on an enormous hall ticket.",
+  "A rabbit races a student toward an assignment deadline.",
+  "An owl lectures exhausted students at midnight.",
   "A crocodile guards the canteen's final porotta.",
-  "A dolphin presents a seminar while the class applauds underwater.",
-  "A parrot leaks the exam timetable into the college corridor.",
-  "A gorilla carries a broken lab computer to technical support.",
-  "A kangaroo smuggles assignments in its pouch before deadline."
+  "A shark conducts a formal placement interview underwater.",
+  "A dolphin demonstrates a laptop project to a panel.",
+  "A parrot drops exam timetable papers while students chase below.",
+  "A gorilla carries a broken desktop computer to technical support.",
+  "A kangaroo secretly stuffs assignments into its pouch before deadline."
 ];
 
 export const TEAMS: TeamDefinition[] = definitions.map(([slug, name, emoji, color], index) => ({
@@ -58,7 +58,9 @@ export const TEAMS: TeamDefinition[] = definitions.map(([slug, name, emoji, colo
   name,
   emoji,
   color,
-  volunteer: `Volunteer ${String(index + 1).padStart(2, "0")} (placeholder)`,
+  // The live game is intentionally animal-zone based. The person physically standing in
+  // each zone is pre-selected by organisers, but a real name is not required by the app.
+  volunteer: `${name} Volunteer`,
   mystery: mysteries[index]
 }));
 
@@ -79,17 +81,23 @@ export const QA_BANK = [
   ["Faculty varilla enna newsinte speed ethra?", "College Wi-Fi-nekkal fast."]
 ] as const;
 
-export const MEME_TEMPLATES = Array.from({ length: 15 }, (_, index) => ({
-  id: `pose-${String(index + 1).padStart(2, "0")}`,
-  title: [
-    "Absolute Cinema", "Distracted Duo", "Pointing Spidermen", "Dramatic Handshake",
-    "Surprised Committee", "Tiny Interview", "Confused Seminar", "Epic Approval",
-    "Last Bench Council", "Record Submission", "Canteen Discovery", "Attendance Panic",
-    "Volunteer Recruitment", "Deadline Sprint", "Committee Chaos Trio"
-  ][index],
-  groupSize: index === 14 ? 3 : 2,
-  safeForOrientation: true
-}));
+export const MEME_TEMPLATES = [
+  { id: "pose-01", title: "Spider-Man Pointing", groupSize: 2 },
+  { id: "pose-02", title: "Epic Handshake", groupSize: 2 },
+  { id: "pose-03", title: "Absolute Cinema", groupSize: 2 },
+  { id: "pose-04", title: "Drake Hotline Bling", groupSize: 2 },
+  { id: "pose-05", title: "Woman Yelling At Cat", groupSize: 2 },
+  { id: "pose-06", title: "Two Buttons", groupSize: 2 },
+  { id: "pose-07", title: "Running Away Balloon", groupSize: 2 },
+  { id: "pose-08", title: "American Chopper Argument", groupSize: 2 },
+  { id: "pose-09", title: "Change My Mind", groupSize: 2 },
+  { id: "pose-10", title: "Surprised Pikachu", groupSize: 2 },
+  { id: "pose-11", title: "Disaster Girl", groupSize: 2 },
+  { id: "pose-12", title: "UNO Draw 25", groupSize: 2 },
+  { id: "pose-13", title: "Is This A Pigeon", groupSize: 2 },
+  { id: "pose-14", title: "Leonardo DiCaprio Cheers", groupSize: 2 },
+  { id: "pose-15", title: "Distracted Boyfriend", groupSize: 3 }
+].map(template => ({ ...template, safeForOrientation: true }));
 
 export const PAIR_MEME_TEMPLATES = MEME_TEMPLATES.filter(template => template.groupSize === 2);
 export const TRIO_MEME_TEMPLATE = MEME_TEMPLATES.find(template => template.groupSize === 3)!;
