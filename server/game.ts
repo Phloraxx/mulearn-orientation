@@ -66,8 +66,8 @@ export class GameService {
   createParticipant(displayName: string) {
     const name = displayName.trim().slice(0, 60);
     if (name.length < 2) throw new GameError("NAME_REQUIRED", "Please enter your name.");
-    if (!["SETUP", "ASSEMBLY"].includes(String(this.event().phase))) {
-      throw new GameError("JOIN_CLOSED", "Joining is closed. Ask technical support.", 409);
+    if (String(this.event().phase) !== "ASSEMBLY") {
+      throw new GameError("JOIN_CLOSED", "Registration has not opened yet. Wait for the host to show the join QR.", 409);
     }
     const sessionToken = token();
     const scanToken = token(16);

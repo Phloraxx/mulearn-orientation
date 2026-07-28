@@ -25,6 +25,13 @@ function roster(teamId: string, size: number) {
 }
 
 describe("allocation and restoration", () => {
+  it("keeps public registration closed until the host enters ASSEMBLY", () => {
+    db.prepare("UPDATE events SET phase='SETUP'").run();
+    expect(() => game.createParticipant("Early Student")).toThrowError("Registration has not opened yet");
+    db.prepare("UPDATE events SET phase='ASSEMBLY'").run();
+    expect(game.createParticipant("On-time Student").participant.id).toBeTruthy();
+  });
+
   it("keeps 550 joins balanced with max skew <= 1", () => {
     const sessions: string[] = [];
     for (let index = 0; index < 550; index++) sessions.push(game.createParticipant(`Student ${index}`).sessionToken);
