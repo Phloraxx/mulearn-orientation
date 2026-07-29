@@ -515,6 +515,7 @@ function HostPanel() {
   const { data, refresh } = useHostSnapshot();
   const [error, setError] = useState("");
   const [minutes, setMinutes] = useState(12);
+  const [phaseBusy, setPhaseBusy] = useState(false);
   if (!data) return <Loading />;
 
   const totalParticipants = data.teams.reduce((sum, team) => sum + team.participants, 0);
@@ -529,9 +530,11 @@ function HostPanel() {
   const action = nextAction[data.event.phase];
 
   async function phase(next: string) {
-    if (!confirm(`${action?.label ?? "Move event"}?\n\n${action?.note ?? ""}`)) return;
+    if (phaseBusy) return;
+    setPhaseBusy(true);
     try { await post("/api/host/phase", { phase: next, mysteryMinutes: minutes }); setError(""); await refresh(); }
     catch (failure: any) { setError(failure.message); }
+    finally { setPhaseBusy(false); }
   }
   async function reveal(teamId: string, step: string) {
     try { await post("/api/host/reveal", { teamId, step }); setError(""); await refresh(); }
@@ -556,7 +559,7 @@ function HostPanel() {
     {action && <section className="next-phase card">
       <div><div className="eyebrow">NEXT</div><h2>{action.label}</h2><p>{action.note}</p></div>
       {action.phase === "MYSTERY" && <label>Timer <input type="number" min={1} max={30} value={minutes} onChange={event => setMinutes(Number(event.target.value))} /> min</label>}
-      <button className="primary" onClick={() => void phase(action.phase)}>{action.label} →</button>
+      <button className="primary" disabled={phaseBusy} onClick={() => void phase(action.phase)}>{phaseBusy ? "UPDATING…" : `${action.label} →`}</button>
     </section>}
 
     {data.event.phase === "ASSEMBLY" && checkedIn < totalParticipants && <div className="host-note">
