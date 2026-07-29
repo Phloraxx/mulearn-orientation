@@ -64,6 +64,9 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
 
   app.onError((error, c) => {
     if (error instanceof GameError) return c.json({ error: error.code, message: error.message }, error.status as 400);
+    if (error instanceof SyntaxError && /json|unexpected|position|property name/i.test(error.message)) {
+      return c.json({ error: "BAD_JSON", message: "Request body must be valid JSON." }, 400);
+    }
     console.error(error);
     return c.json({ error: "INTERNAL", message: "Something went wrong. Please retry." }, 500);
   });
