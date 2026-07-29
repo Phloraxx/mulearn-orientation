@@ -55,6 +55,19 @@ async function staffCookie(app: ReturnType<typeof createApp>["app"], role: strin
   return login.headers.get("set-cookie")!.split(";")[0];
 }
 
+describe("request parsing", () => {
+  it("returns BAD_JSON instead of INTERNAL for malformed JSON bodies", async () => {
+    const { app } = createApp(db);
+    const response = await app.request("/api/join", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{bad-json"
+    });
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ error: "BAD_JSON", message: "Request body must be valid JSON." });
+  });
+});
+
 describe("HTTP authorization", () => {
   it("validates staff sessions so bare private routes cannot hang silently", async () => {
     const { app } = createApp(db);
