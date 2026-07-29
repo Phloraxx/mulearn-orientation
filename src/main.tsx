@@ -206,16 +206,29 @@ function StaffGate({ role, teamSlug, children }: { role: string; teamSlug?: stri
   const [ready, setReady] = useState(false);
   const [error, setError] = useState("");
   useEffect(() => {
-    const supplied = new URLSearchParams(location.search).get("t");
-    const bootstrap = supplied
-      ? post("/api/auth/bootstrap", { role, teamSlug, token: supplied })
-      : Promise.resolve();
-    void bootstrap.then(() => {
-      if (supplied) history.replaceState(null, "", location.pathname);
-      setReady(true);
-    }).catch(failure => setError(failure.message));
+    let cancelled = false;
+    async function authenticate() {
+      const supplied = new URLSearchParams(location.search).get("t");
+      try {
+        if (supplied) {
+          await post("/api/auth/bootstrap", { role, teamSlug, token: supplied });
+          history.replaceState(null, "", location.pathname);
+        }
+        const params = new URLSearchParams({ role });
+        if (teamSlug) params.set("teamSlug", teamSlug);
+        await api(`/api/auth/session?${params}`);
+        if (!cancelled) { setError(""); setReady(true); }
+      } catch (failure: any) {
+        if (!cancelled) {
+          setReady(false);
+          setError(failure.message || "Open your provisioned private access link on this device.");
+        }
+      }
+    }
+    void authenticate();
+    return () => { cancelled = true; };
   }, [role, teamSlug]);
-  if (error) return <Shell><StatusCard title="Private access required" text={error} emoji="🔐" /></Shell>;
+  if (error) return <Shell><StatusCard title="Private access required" text={`${error} Open the full private ${role} link on this device.`} emoji="🔐" /></Shell>;
   return ready ? <>{children}</> : <Loading />;
 }
 

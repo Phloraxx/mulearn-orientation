@@ -56,6 +56,20 @@ async function staffCookie(app: ReturnType<typeof createApp>["app"], role: strin
 }
 
 describe("HTTP authorization", () => {
+  it("validates staff sessions so bare private routes cannot hang silently", async () => {
+    const { app } = createApp(db);
+    const missing = await app.request("/api/auth/session?role=projector");
+    expect(missing.status).toBe(401);
+
+    const projectorCookie = await staffCookie(app, "projector", "projector-demo-secret");
+    const valid = await app.request("/api/auth/session?role=projector", { headers: { Cookie: projectorCookie } });
+    expect(valid.status).toBe(200);
+    expect((await valid.json() as any).role).toBe("projector");
+
+    const wrongRole = await app.request("/api/auth/session?role=host", { headers: { Cookie: projectorCookie } });
+    expect(wrongRole.status).toBe(403);
+  });
+
   it("rejects a cross-team meme upload even with a valid volunteer session", async () => {
     const stamp = now();
     db.prepare(`INSERT INTO participants
