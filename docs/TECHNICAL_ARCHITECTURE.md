@@ -50,10 +50,10 @@ Recommended logical routes:
 /volunteer/:teamSlug      team-scoped volunteer interface
 /projector                projector/display UI
 /host                     master event control + reveal control
-/admin                    recovery/support tools
+/host                     master control + recovery/support tools
 ```
 
-Volunteer, host, and admin surfaces must not be publicly claimable roles.
+Volunteer, host, and host recovery sections must not be publicly claimable roles.
 
 Use provisioned secret tokens or event-issued credentials stored server-side.
 
@@ -62,7 +62,6 @@ Example deployment-time links:
 ```text
 https://orientation.mulearnscet.in/volunteer/lion?t=<long-secret>
 https://orientation.mulearnscet.in/host?t=<long-secret>
-https://orientation.mulearnscet.in/admin?t=<long-secret>
 https://orientation.mulearnscet.in/projector?t=<display-secret>
 ```
 
@@ -227,7 +226,7 @@ On reload:
 
 Never create a second participant merely because the browser refreshed.
 
-Provide an explicit `Reset this device` only in admin/recovery flow, not as a prominent participant option.
+Provide an explicit `Reset this device` only in host recovery flow, not as a prominent participant option.
 
 ---
 
@@ -462,7 +461,7 @@ A practical implementation may define tile layouts in asset metadata:
 }
 ```
 
-The x/y metadata is server/admin-only and must never appear in participant UI/API responses beyond what is required to fetch that participant's own image.
+The x/y metadata is server/host-only and must never appear in participant UI/API responses beyond what is required to fetch that participant's own image.
 
 A slight visual crop overlap can make mixed-device physical alignment more forgiving.
 
@@ -518,9 +517,9 @@ The actual mystery source image is not available through participant APIs before
 
 ---
 
-# 20. Admin/recovery features
+# 20. Host recovery features
 
-A small admin surface is essential for a 550-device room.
+A small host recovery section is essential for a 550-device room.
 
 Minimum actions:
 
@@ -534,7 +533,7 @@ Minimum actions:
 - mark missing participant so their pair does not permanently block team progress
 - regenerate Q&A assignments before Mystery starts
 - inspect failed/pending media uploads
-- manually submit/clear theory only with explicit admin action
+- manually submit/clear theory only with explicit host recovery action
 - reset event/demo data in non-production/demo mode
 
 All actions should create a simple audit log.
@@ -566,7 +565,7 @@ Design target:
 
 - 550 participant sessions
 - 20 volunteer sessions
-- 1–3 projector/host/admin sessions
+- 1–3 projector/host sessions
 - bursts of hundreds of initial joins
 - bursts of ~20 concurrent check-ins
 - up to ~275 meme uploads over several minutes
@@ -584,7 +583,7 @@ Actual image binary load can be tested with representative compressed fixtures r
 This is an orientation game, not an identity system, but basic controls still matter:
 
 - participant QR uses opaque tokens
-- host/admin/volunteer routes require secrets/sessions
+- host/volunteer routes require secrets/sessions
 - volunteer permissions are team-scoped server-side
 - uploads validate MIME, size, and assignment/team ownership
 - rate-limit sensitive/mutating endpoints
@@ -593,7 +592,7 @@ This is an orientation game, not an identity system, but basic controls still ma
 - escape/sanitise participant names and theory text
 - use HTTPS in production
 
-Decide event media retention after the event. Provide an admin cleanup/export command rather than silently retaining student photos forever.
+Decide event media retention after the event. Provide an host cleanup/export command rather than silently retaining student photos forever.
 
 ---
 

@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { MEME_TEMPLATES, QA_BANK, TEAMS } from "../server/content.js";
 import { AssetStore, type AssetManifest } from "../server/assets.js";
@@ -16,6 +16,7 @@ if (MEME_TEMPLATES.filter(item => item.groupSize === 2).length !== 14) failures.
 if (MEME_TEMPLATES.filter(item => item.groupSize === 3).length !== 1) failures.push("Need exactly one trio meme template.");
 if (new Set(MEME_TEMPLATES.map(item => item.id)).size !== 15) failures.push("Meme template IDs are not unique.");
 if (new Set(MEME_TEMPLATES.map(item => item.title)).size !== 15) failures.push("Meme template titles are not unique.");
+if (MEME_TEMPLATES.some(item => !item.instruction?.trim())) failures.push("Every meme template needs a clear recreation instruction.");
 if (new Set(QA_BANK.map(item => item[0])).size !== QA_BANK.length) failures.push("Duplicate question text.");
 if (new Set(QA_BANK.map(item => item[1])).size !== QA_BANK.length) failures.push("Ambiguous/duplicate answer text.");
 
@@ -33,7 +34,9 @@ else {
   if (manifest.mode === "approved") {
     const assets = new AssetStore(contentRoot, { ...process.env, NODE_ENV: "development" });
     for (const template of MEME_TEMPLATES) {
-      if (!assets.memeReference(TEAMS[0].slug, template.id)) failures.push(`Missing approved shared meme: ${template.id}`);
+      const meme = assets.memeReference(TEAMS[0].slug, template.id);
+      if (!meme) failures.push(`Missing approved shared meme: ${template.id}`);
+      else if (statSync(meme.path).size < 10_000) failures.push(`Meme reference looks suspiciously small: ${template.id}`);
     }
     for (const team of TEAMS) {
       if (!assets.mysterySource(team.slug)) failures.push(`Missing approved mystery source: ${team.slug}`);

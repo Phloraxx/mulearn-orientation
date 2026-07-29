@@ -141,11 +141,12 @@ function ParticipantView({ participant, scanToken, error, onRefresh }: {
     <section className="team-mini" style={teamStyle}><span>{participant.team.emoji}</span>{participant.team.name} TEAM</section>
     {participant.meme ? <section className="meme-view">
       <div className="eyebrow">FIND YOUR GROUP · COPY THE POSE</div>
-      <img src={participant.meme.referenceUrl} alt={`${participant.meme.title} reference`} />
+      <img src={participant.meme.referenceUrl} alt={`${participant.meme.title} reference`} loading="eager" />
       <h1>{participant.meme.title}</h1>
+      <div className="pose-instruction">{participant.meme.instruction}</div>
       <div className="people">{participant.meme.group.map(person => <span key={person}>{person}</span>)}</div>
-      <p>Get ready inside your team zone, then go to your volunteer for one fast photo.</p>
-    </section> : <StatusCard title="Hold tight" text="Your volunteer is preparing the meme groups." />}
+      <p>Find the names above inside your animal zone, recreate this pose, then go to your volunteer for one fast photo.</p>
+    </section> : <StatusCard title="No meme group found" text="Stay in your animal zone and tell the host. You should not be left waiting here." emoji="🛠️" />}
   </Shell>;
 
   if (phase === "MYSTERY") return <Shell>
@@ -167,11 +168,19 @@ function ParticipantView({ participant, scanToken, error, onRefresh }: {
       <p>Matching question ulla aale kandupidikku. Ee key avarkku kodukku:</p>
       <div className="answer-key">{participant.mystery.answerKey}</div>
       <small>Question-holder aanu key enter cheyyendath.</small>
-    </section> : <StatusCard title="Assignments incoming" text="Stay with your animal team." />}
+    </section> : <StatusCard title="No mystery role found" text="Tell the host. Every active participant should already have a question, answer, or Detective role." emoji="🛠️" />}
   </Shell>;
 
-  if (phase === "REVEAL" || phase === "ENDED") return <Shell>
+  if (phase === "REVEAL") return <Shell>
     <StatusCard title="Eyes on the big screen" text="The theories are about to meet reality." emoji="👀" />
+  </Shell>;
+
+  if (phase === "ENDED") return <Shell>
+    <StatusCard title="That's a wrap!" text="Thanks for playing. You can put your phone away and stay with your team for the closing." emoji="🎉" />
+  </Shell>;
+
+  if (phase === "SETUP") return <Shell>
+    <StatusCard title="Event getting ready" text="Registration is currently closed. Keep this page open; the host will open Assembly shortly." emoji="⏳" />
   </Shell>;
 
   return <Shell>
@@ -298,7 +307,8 @@ function VolunteerPanel() {
       <div><div className="eyebrow">FIXED TEAM VOLUNTEER</div><h1>{data.team.name}</h1></div></section>
     <div className="phase-pill">{phase}</div>
     <ErrorBox error={error} />{scanMessage && <div className="success">{scanMessage}</div>}
-    {["SETUP", "ASSEMBLY"].includes(phase) && <section className="card">
+    {phase === "SETUP" && <StatusCard title="Waiting for host" text="Registration is closed. Stay in your animal zone; scanning opens with Assembly." emoji="⏳" />}
+    {phase === "ASSEMBLY" && <section className="card">
       <div className="big-progress">{data.progress.checked}<span>/{data.progress.total}</span></div>
       <p>Only scan {data.team.name} participants.</p>
       <form onSubmit={scan}>
@@ -331,6 +341,8 @@ function VolunteerPanel() {
           <small>You can submit now. Do not wait for every pair.</small>
         </form>}
     </section>}
+    {phase === "REVEAL" && <StatusCard title="Theory locked in" text="Keep your team together and watch the projector for the reveals." emoji="👀" />}
+    {phase === "ENDED" && <StatusCard title="Team mission complete" text="Thanks! Keep the zone tidy and help with the closing if needed." emoji="🎉" />}
   </Shell>;
 }
 
@@ -423,26 +435,54 @@ function ProjectorPanel() {
     return () => { cancelled = true; clearTimeout(timer); };
   }, [data?.event.phase]);
   if (!data) return <Loading />;
+
+  const phase = data.event.phase;
   const revealTeam = data.teams.find(team => team.id === data.event.revealTeamId);
   const theory = data.theories.find(item => item.id === data.event.revealTeamId);
-  if (data.event.phase === "MEME") return <main className="projector meme-projector">
+
+  if (phase === "SETUP") return <main className="projector idle-projector">
+    <div className="reveal-animal">⚡</div>
+    <div className="eyebrow">µLEARN SCET ORIENTATION</div>
+    <h1>READY WHEN YOU ARE</h1>
+    <p>Registration is closed until the host opens Assembly.</p>
+  </main>;
+
+  if (phase === "MEME") return <main className="projector meme-projector">
     {slide ? <><img src={slide.url} alt="Captured meme recreation" /><div className="slide-label">{slide.emoji} {slide.name}</div></>
       : <div className="projector-wait">MEME CHAOS INCOMING…</div>}
   </main>;
-  if (data.event.phase === "REVEAL" && revealTeam) return <main className="projector reveal-projector">
-    <div className="reveal-animal">{revealTeam.emoji}</div><div className="eyebrow">{revealTeam.name} TEAM BELIEVES…</div>
-    {data.event.revealStep === "THEORY" && <h1>{theory?.theory ?? "No theory submitted"}</h1>}
-    {data.event.revealStep === "COUNTDOWN" && <RevealCountdown />}
-    {data.event.revealStep === "ACTUAL_IMAGE" && <img src={`/api/reveal/mystery/${revealTeam.id}`} alt="Actual mystery source" />}
+
+  if (phase === "MYSTERY") return <main className="projector grid-projector">
+    <div className="projector-title"><div><span>µLEARN SCET</span><h1>MYSTERY MODE</h1></div>
+      <Countdown endsAt={data.event.mysteryEndsAt} /></div>
+    <TeamGrid teams={data.teams} phase={phase} />
   </main>;
-  return <main className="projector grid-projector">
-    <div className="projector-title"><div><span>µLEARN SCET</span><h1>{data.event.phase === "MYSTERY" ? "MYSTERY MODE" : "FIND YOUR ANIMAL"}</h1></div>
-      {data.event.phase === "MYSTERY" ? <Countdown endsAt={data.event.mysteryEndsAt} />
-        : <div className="join-qr"><QRCodeSVG value={location.origin} size={92} /><span>SCAN TO JOIN</span></div>}</div>
-    <TeamGrid teams={data.teams} phase={data.event.phase} />
+
+  if (phase === "REVEAL") {
+    if (!revealTeam) return <main className="projector idle-projector">
+      <div className="reveal-animal">🎬</div><div className="eyebrow">FINAL REVEALS</div>
+      <h1>HOST — PICK A TEAM</h1><p>The first theory is ready when you are.</p>
+    </main>;
+    return <main className="projector reveal-projector">
+      <div className="reveal-animal">{revealTeam.emoji}</div><div className="eyebrow">{revealTeam.name} TEAM BELIEVES…</div>
+      {data.event.revealStep === "THEORY" && <h1>{theory?.theory ?? "No theory submitted"}</h1>}
+      {data.event.revealStep === "COUNTDOWN" && <RevealCountdown />}
+      {data.event.revealStep === "ACTUAL_IMAGE" && <img src={`/api/reveal/mystery/${revealTeam.id}`} alt="Actual mystery source" />}
+    </main>;
+  }
+
+  if (phase === "ENDED") return <main className="projector idle-projector ended-projector">
+    <div className="reveal-animal">🎉</div><div className="eyebrow">µLEARN SCET</div>
+    <h1>THAT'S A WRAP!</h1><p>Thanks for playing. See you around campus ✨</p>
+  </main>;
+
+  // ASSEMBLY is the only phase that advertises the public join QR.
+  return <main className="projector grid-projector assembly-projector">
+    <div className="projector-title assembly-title"><div><span>µLEARN SCET</span><h1>FIND YOUR ANIMAL</h1><p>Scan → enter your name → find your animal zone.</p></div>
+      <div className="join-qr"><QRCodeSVG value={location.origin} size={310} level="M" /><span>SCAN TO JOIN</span></div></div>
+    <TeamGrid teams={data.teams} phase={phase} />
   </main>;
 }
-
 function HostApp() {
   return <StaffGate role="host"><HostPanel /></StaffGate>;
 }
@@ -451,67 +491,105 @@ function HostPanel() {
   const { data, refresh } = useHostSnapshot();
   const [error, setError] = useState("");
   const [minutes, setMinutes] = useState(12);
+  if (!data) return <Loading />;
+
+  const totalParticipants = data.teams.reduce((sum, team) => sum + team.participants, 0);
+  const checkedIn = data.teams.reduce((sum, team) => sum + team.checkedIn, 0);
+  const nextAction: Record<string, { phase: string; label: string; note: string }> = {
+    SETUP: { phase: "ASSEMBLY", label: "OPEN REGISTRATION", note: "Shows the big join QR and allows students to enter." },
+    ASSEMBLY: { phase: "MEME", label: "START MEME ROUND", note: "Locks new joins and creates every active student's meme group." },
+    MEME: { phase: "MYSTERY", label: "START MYSTERY ROUND", note: "Creates Q/A roles, Detectives and starts the timer." },
+    MYSTERY: { phase: "REVEAL", label: "START FINAL REVEALS", note: "Stops matching/theory submissions and opens reveal control." },
+    REVEAL: { phase: "ENDED", label: "END EVENT", note: "Shows the closing screen on every device." }
+  };
+  const action = nextAction[data.event.phase];
+
   async function phase(next: string) {
-    if (!confirm(`Move the whole event to ${next}?`)) return;
-    try { await post("/api/host/phase", { phase: next, mysteryMinutes: minutes }); void refresh(); }
+    if (!confirm(`${action?.label ?? "Move event"}?\n\n${action?.note ?? ""}`)) return;
+    try { await post("/api/host/phase", { phase: next, mysteryMinutes: minutes }); setError(""); await refresh(); }
     catch (failure: any) { setError(failure.message); }
   }
   async function reveal(teamId: string, step: string) {
-    await post("/api/host/reveal", { teamId, step }); void refresh();
+    try { await post("/api/host/reveal", { teamId, step }); setError(""); await refresh(); }
+    catch (failure: any) { setError(failure.message); }
   }
-  if (!data) return <Loading />;
-  return <Shell wide><div className="console-head"><div><div className="eyebrow">MASTER CONTROL</div><h1>{data.event.phase}</h1></div>
-    {data.event.phase === "MYSTERY" && <Countdown endsAt={data.event.mysteryEndsAt} />}</div>
+  async function resetEvent() {
+    const confirmation = prompt("This deletes ALL participants, uploads, assignments and theories. Type RESET to continue.");
+    if (confirmation !== "RESET") return;
+    try { await post("/api/host/reset", { confirm: confirmation }); setError(""); await refresh(); }
+    catch (failure: any) { setError(failure.message); }
+  }
+
+  return <Shell wide>
+    <div className="console-head"><div><div className="eyebrow">ONE HOST · MASTER CONTROL</div><h1>{data.event.phase}</h1>
+      <p>{totalParticipants} participants · {checkedIn} volunteer-scanned</p></div>
+      {data.event.phase === "MYSTERY" && <Countdown endsAt={data.event.mysteryEndsAt} />}</div>
     <ErrorBox error={error} />
-    <section className="control-bar">
-      {["ASSEMBLY", "MEME", "MYSTERY", "REVEAL", "ENDED"].map(item =>
-        <button key={item} className={data.event.phase === item ? "active" : ""} onClick={() => void phase(item)}>{item}</button>)}
-      <label>Timer <input type="number" min={1} max={30} value={minutes} onChange={event => setMinutes(Number(event.target.value))} /> min</label>
-    </section>
+
+    <div className="phase-steps">{["SETUP", "ASSEMBLY", "MEME", "MYSTERY", "REVEAL", "ENDED"].map(item =>
+      <span key={item} className={data.event.phase === item ? "current" : ""}>{item}</span>)}</div>
+
+    {action && <section className="next-phase card">
+      <div><div className="eyebrow">NEXT</div><h2>{action.label}</h2><p>{action.note}</p></div>
+      {action.phase === "MYSTERY" && <label>Timer <input type="number" min={1} max={30} value={minutes} onChange={event => setMinutes(Number(event.target.value))} /> min</label>}
+      <button className="primary" onClick={() => void phase(action.phase)}>{action.label} →</button>
+    </section>}
+
+    {data.event.phase === "ASSEMBLY" && checkedIn < totalParticipants && <div className="host-note">
+      {totalParticipants - checkedIn} joined student(s) have not been volunteer-scanned yet. They will still receive later activities, so one missed scan cannot exclude anyone.
+    </div>}
+
+    {data.event.phase === "ENDED" && <section className="card status-card compact"><div className="huge">✅</div><h2>Event ended cleanly</h2><p>Projector and participant phones are showing the closing screen.</p></section>}
+
     <TeamGrid teams={data.teams} phase={data.event.phase} />
+
     {data.event.phase === "REVEAL" && <section className="reveal-controls">
+      <h2>Reveal teams</h2>
       {data.teams.map(team => <article key={team.id}><strong>{team.emoji} {team.name}</strong>
         <div><button onClick={() => void reveal(team.id, "THEORY")}>THEORY</button>
           <button onClick={() => void reveal(team.id, "COUNTDOWN")}>3–2–1</button>
           <button onClick={() => void reveal(team.id, "ACTUAL_IMAGE")}>IMAGE</button></div>
       </article>)}
     </section>}
+
+    <details className="host-tools">
+      <summary>TECHNICAL / RECOVERY TOOLS</summary>
+      <HostRecoveryTools />
+      <div className="danger-zone"><h3>Full rehearsal reset</h3><p>Use only before the real event or after a rehearsal.</p>
+        <button onClick={() => void resetEvent()}>RESET ALL EVENT DATA</button></div>
+    </details>
   </Shell>;
 }
-
-function AdminApp() {
-  return <StaffGate role="admin"><AdminPanel /></StaffGate>;
-}
-
-function AdminPanel() {
+function HostRecoveryTools() {
   const [query, setQuery] = useState("");
   const [participants, setParticipants] = useState<any[]>([]);
   const [notice, setNotice] = useState("");
   const [overview, setOverview] = useState<{ teams: any[]; media: any[]; event: any } | null>(null);
   const search = useCallback(async () => {
-    const result = await api<{ participants: any[] }>(`/api/admin/participants?q=${encodeURIComponent(query)}`);
+    const result = await api<{ participants: any[] }>(`/api/host/participants?q=${encodeURIComponent(query)}`);
     setParticipants(result.participants);
-    setOverview(await api("/api/admin/overview"));
+    setOverview(await api("/api/host/overview"));
   }, [query]);
-  useEffect(() => { void search(); }, [search]);
-  async function active(id: string, value: boolean) { await post(`/api/admin/participants/${id}/active`, { active: value }); void search(); }
-  async function checkIn(id: string, value: boolean) { await post(`/api/admin/participants/${id}/check-in`, { checkedIn: value }); void search(); }
+  useEffect(() => { void search(); }, []);
+  async function active(id: string, value: boolean) { await post(`/api/host/participants/${id}/active`, { active: value }); void search(); }
+  async function checkIn(id: string, value: boolean) { await post(`/api/host/participants/${id}/check-in`, { checkedIn: value }); void search(); }
   async function recover(id: string) {
-    const result = await post<{ recoveryUrl: string }>(`/api/admin/participants/${id}/recovery`, {});
+    const result = await post<{ recoveryUrl: string }>(`/api/host/participants/${id}/recovery`, {});
     await navigator.clipboard.writeText(result.recoveryUrl).catch(() => {});
     setNotice(`Recovery link copied: ${result.recoveryUrl}`);
   }
   async function reassign(id: string, teamId: string) {
     if (!teamId || !confirm("Move this participant and clear their check-in?")) return;
-    await post(`/api/admin/participants/${id}/reassign`, { teamId }); void search();
+    await post(`/api/host/participants/${id}/reassign`, { teamId }); void search();
   }
-  return <Shell wide><div className="eyebrow">TECHNICAL RECOVERY</div><h1>Admin</h1>
+  return <section className="host-recovery">
+    <div className="eyebrow">PARTICIPANT RECOVERY</div><h2>Fix a phone or roster issue</h2>
     {notice && <div className="success">{notice}</div>}
-    <div className="admin-search"><input value={query} onChange={event => setQuery(event.target.value)}
+    <div className="recovery-search"><input value={query} onChange={event => setQuery(event.target.value)}
       placeholder="Search name, team, or participant ID" /><button onClick={() => void search()}>SEARCH</button></div>
-    <div className="admin-table">{participants.map(person => <article key={person.id}>
+    <div className="recovery-table">{participants.map(person => <article key={person.id}>
       <div><strong>{person.emoji} {person.display_name}</strong><small>{person.team_name} · {person.qa_role} · {person.id}</small></div>
-      <div className="admin-actions">
+      <div className="recovery-actions">
         <button onClick={() => void checkIn(person.id, !person.checked_in_at)}>{person.checked_in_at ? "UNCHECK" : "CHECK IN"}</button>
         <button onClick={() => void active(person.id, !person.active)}>{person.active ? "MARK ABSENT" : "RESTORE"}</button>
         <button onClick={() => void recover(person.id)}>NEW DEVICE</button>
@@ -520,15 +598,14 @@ function AdminPanel() {
         </select>
       </div>
     </article>)}</div>
-    <section className="admin-tools card"><h2>Recovery tools</h2>
-      <button onClick={async () => { await post("/api/admin/qa/regenerate", {}); setNotice("Q&A assignments regenerated."); }}>REGENERATE Q&A BEFORE LOCK</button>
-      <h3>Recent media</h3>
-      {overview?.media.map(media => <div className="media-row" key={media.id}><span>{media.team_name} · {media.title} · {media.status}</span>
-        <button onClick={async () => { await post(`/api/admin/media/${media.id}/reset`, {}); void search(); }}>RESET CAPTURE</button></div>)}
+    <section className="recovery-tools card"><h3>Round recovery</h3>
+      <button onClick={async () => { await post("/api/host/qa/regenerate", {}); setNotice("Q&A assignments regenerated."); }}>REGENERATE Q&A BEFORE MYSTERY</button>
+      <h3>Recent meme captures</h3>
+      {overview?.media.length ? overview.media.map(media => <div className="media-row" key={media.id}><span>{media.team_name} · {media.title} · {media.status}</span>
+        <button onClick={async () => { await post(`/api/host/media/${media.id}/reset`, {}); void search(); }}>RESET CAPTURE</button></div>) : <p className="muted">No captures yet.</p>}
     </section>
-  </Shell>;
+  </section>;
 }
-
 function App() {
   return <Routes>
     <Route path="/" element={<ParticipantApp />} />
@@ -536,7 +613,6 @@ function App() {
     <Route path="/volunteer/:slug" element={<VolunteerApp />} />
     <Route path="/projector" element={<ProjectorApp />} />
     <Route path="/host" element={<HostApp />} />
-    <Route path="/admin" element={<AdminApp />} />
     <Route path="*" element={<Navigate to="/" replace />} />
   </Routes>;
 }

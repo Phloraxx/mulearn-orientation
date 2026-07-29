@@ -104,7 +104,7 @@ Production refuses to start when any required secret is absent, shorter than
 32 characters, or contains a demo/placeholder/example value. `SITE_URL` must be
 the public HTTPS origin and cannot be localhost.
 
-Volunteer access tokens should preferably be generated/provisioned by a seed/admin command rather than written as plaintext into source files.
+Volunteer access tokens should preferably be generated/provisioned by a provisioning command rather than written as plaintext into source files.
 
 ---
 
@@ -230,7 +230,7 @@ Recommended sequence:
 8. Run 550-participant load simulation.
 9. Deploy the production image with the exact approved `/content` bundle.
 10. Verify persistent volume.
-11. Provision all volunteer/host/admin/projector access links.
+11. Provision all volunteer/host/projector access links.
 12. Test from real Android + iPhone devices over mobile data.
 13. Take pre-event DB/media/content backup/snapshot.
 14. Put event into clean `SETUP`/`ASSEMBLY` state.
@@ -247,7 +247,7 @@ Before doors/opening:
 - verify DB path/volume
 - verify health endpoint
 - verify one real participant join
-- delete/reset that test participant via admin
+- delete/reset that test participant from the host recovery tools
 - test Lion volunteer scanner against one Lion and one non-Lion seeded/test participant
 - test projector SSE
 

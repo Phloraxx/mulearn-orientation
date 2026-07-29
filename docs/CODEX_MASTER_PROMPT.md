@@ -161,7 +161,7 @@ Implement polished mobile-first routes for:
 3. team-scoped volunteer interface
 4. projector/display
 5. host/master control
-6. admin/recovery
+6. host recovery
 
 The UI should feel fun and energetic but stay extremely obvious at 550-person scale. One participant screen should generally have one primary instruction/action.
 
@@ -192,7 +192,7 @@ Volunteer endpoints derive team from authenticated volunteer session. Never trus
 
 Participant QR contains an opaque scan token, not trusted team/name data.
 
-Provide host/admin/projector provisioned access using strong bootstrap tokens that are exchanged into safer sessions/cookies where practical.
+Provide host/projector provisioned access using strong bootstrap tokens that are exchanged into safer sessions/cookies where practical.
 
 ---
 
@@ -200,7 +200,7 @@ Provide host/admin/projector provisioned access using strong bootstrap tokens th
 
 The event cannot be blocked by one bad phone.
 
-Implement admin recovery for at least:
+Implement host recovery for at least:
 
 - search participant
 - manual check-in/uncheck
@@ -325,7 +325,7 @@ Use the package manager you choose consistently and commit the lockfile.
 3. Create a concise internal implementation checklist.
 4. Build backend/data model and tests for invariants first.
 5. Build participant/volunteer flows.
-6. Build host/projector/admin surfaces.
+6. Build host/projector/host recovery sections.
 7. Build media/slideshow pipeline.
 8. Build Mystery pairing/puzzle/reveal flow.
 9. Add placeholder content/assets + preprocessors.
@@ -361,7 +361,7 @@ Before considering the task complete, demonstrate or verify:
 - late matches still work after theory submission
 - projector/host reveal flow works
 - server restart/data persistence strategy is correct
-- admin recovery exists
+- host recovery exists
 - production build succeeds
 - Docker image builds
 - representative 550-participant simulation completes acceptably

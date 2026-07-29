@@ -14,6 +14,5 @@ for (const team of teams) {
   console.log(`${team.name}: ${site}/volunteer/${team.slug}?t=${raw}`);
 }
 console.log(`Host: ${site}/host?t=${process.env.HOST_BOOTSTRAP_SECRET ?? "<set HOST_BOOTSTRAP_SECRET>"}`);
-console.log(`Admin: ${site}/admin?t=${process.env.ADMIN_BOOTSTRAP_SECRET ?? "<set ADMIN_BOOTSTRAP_SECRET>"}`);
 console.log(`Projector: ${site}/projector?t=${process.env.PROJECTOR_BOOTSTRAP_SECRET ?? "<set PROJECTOR_BOOTSTRAP_SECRET>"}`);
 db.close();

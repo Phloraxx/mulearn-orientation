@@ -98,7 +98,7 @@ The repository now contains the production single-service application:
 - fixed-team volunteer scanner, camera capture queue, and early theory submission
 - host phase/timer/reveal console
 - fixed-order projector assembly/mystery grids and adaptive endless meme slideshow
-- technical recovery admin for search, check-in, absence, device recovery, safe reassignment, Q&A regeneration, and media reset
+- host recovery tools for search, check-in, absence, device recovery, safe reassignment, Q&A regeneration, and media reset
 - Hono HTTP/SSE server backed by SQLite WAL
 - controlled persistent media storage under `/data/media`
 - deterministic placeholder meme and mystery assets
@@ -186,7 +186,7 @@ rotate/provision the fixed volunteer credentials and print all private links:
 node dist-server/server/provision-access.js
 ```
 
-Do not share host/admin/projector links with participants.
+Do not share host/projector links with participants.
 
 ## Dokploy + Traefik deployment
 
@@ -205,12 +205,12 @@ Do not share host/admin/projector links with participants.
    every client fetches an authoritative snapshot after reconnect.
 7. Deploy and wait for both `/health` and `/ready` to return HTTP 200.
 8. Run `node dist-server/server/provision-access.js` in the running container and distribute the 20
-   resulting volunteer links plus the host/admin/projector links privately.
+   resulting volunteer links plus the host/projector links privately.
 9. Run `CONTENT_DIR=/path/to/approved-content pnpm content:validate`,
    `pnpm test`, and `pnpm simulate:550` against the release commit before
    opening registration.
 10. Verify persistence by joining one test participant, restarting the container,
-    confirming restoration, and deleting/deactivating that test record in Admin.
+    confirming restoration, and deleting/deactivating that test record in Host recovery.
 11. Create the `orientation` DNS record to the existing Dokploy/Traefik ingress.
     Do not alter the root domain or other subdomains.
 12. Snapshot `/data/orientation.sqlite`, `/data/orientation.sqlite-wal` when
@@ -232,7 +232,6 @@ The provision command prints exact links following these patterns:
 ```text
 https://orientation.mulearnscet.in/volunteer/lion?t=<private-team-token>
 https://orientation.mulearnscet.in/host?t=<host-secret>
-https://orientation.mulearnscet.in/admin?t=<admin-secret>
 https://orientation.mulearnscet.in/projector?t=<projector-secret>
 ```
 

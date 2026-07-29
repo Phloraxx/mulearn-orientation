@@ -42,7 +42,7 @@ Avoid introducing PocketBase, Supabase, Firebase, Redis, Kafka, microservices, e
 
 - Reject a volunteer scan when participant.teamId != volunteer.teamId.
 - Prevent duplicate check-ins, duplicate pair use, and pair-key reuse.
-- Provide admin recovery controls for dead phones, mistaken sessions, absent students, image upload failure, and participant removal/reassignment.
+- Provide host recovery controls for dead phones, mistaken sessions, absent students, image upload failure, and participant removal/reassignment.
 - Uploaded meme images should be resilient to temporary network loss; capture locally first and retry upload where practical.
 - Never make one missing participant block an entire team from progressing.
 

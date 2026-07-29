@@ -138,6 +138,29 @@ describe("mystery invariants", () => {
 });
 
 describe("meme assignment shape", () => {
+  it("does not exclude active juniors from later rounds just because a volunteer scan was missed", () => {
+    const stamp = now();
+    db.prepare(`INSERT INTO participants
+      (id,display_name,team_id,session_hash,scan_token_hash,checked_in_at,created_at,last_seen_at)
+      VALUES(?,?,?,?,?,?,?,?)`).run("unscanned", "Unscanned Junior", "team-lion", hash("unscanned-session"), hash("unscanned-scan"), null, stamp, stamp);
+    game.setPhase("MEME");
+    expect(game.participantSnapshotById("unscanned").meme).not.toBeNull();
+    game.setPhase("MYSTERY");
+    expect(game.participantSnapshotById("unscanned").mystery.role).toBe("DETECTIVE");
+  });
+
+  it("gives a one-person rehearsal team a visible meme instead of an endless waiting state", () => {
+    const stamp = now();
+    db.prepare(`INSERT INTO participants
+      (id,display_name,team_id,session_hash,scan_token_hash,created_at,last_seen_at)
+      VALUES(?,?,?,?,?,?,?)`).run("solo", "Solo Tester", "team-lion", hash("solo-session"), hash("solo-scan"), stamp, stamp);
+    game.setPhase("MEME");
+    const meme = game.participantSnapshotById("solo").meme;
+    expect(meme).not.toBeNull();
+    expect(meme!.groupSize).toBe(1);
+    expect(meme!.instruction.length).toBeGreaterThan(5);
+  });
+
   it("creates 14 pairs for 28 and 12 pairs plus one trio for 27", () => {
     roster("team-lion", 28);
     const stamp = now();
