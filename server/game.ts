@@ -5,6 +5,13 @@ import { hash, now, shuffle, token } from "./utils.js";
 
 type Row = Record<string, string | number | null>;
 
+const PUZZLE_OMISSION_ORDER = [0, 27, 6, 21, 1, 26, 5, 22, 7, 20, 13, 14];
+function puzzlePositions(count: number) {
+  const safeCount = Math.max(0, Math.min(28, count));
+  const omitted = new Set(PUZZLE_OMISSION_ORDER.slice(0, 28 - safeCount));
+  return Array.from({ length: 28 }, (_, index) => index).filter(index => !omitted.has(index));
+}
+
 export class GameError extends Error {
   constructor(public code: string, message: string, public status = 400) {
     super(message);
@@ -244,8 +251,9 @@ export class GameService {
           ordinary = participants.slice(0, -1);
           this.db.prepare("UPDATE participants SET qa_role='DETECTIVE' WHERE id=?").run(detective.id);
         }
+        const tilePositions = shuffle(puzzlePositions(ordinary.length));
         ordinary.forEach((participant, index) => {
-          this.db.prepare("UPDATE participants SET puzzle_index=? WHERE id=?").run(index, participant.id);
+          this.db.prepare("UPDATE participants SET puzzle_index=? WHERE id=?").run(tilePositions[index], participant.id);
         });
         const half = ordinary.length / 2;
         const keySeed = Math.floor(Math.random() * 9000);

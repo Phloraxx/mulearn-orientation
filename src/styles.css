@@ -41,9 +41,10 @@ textarea { resize: vertical; }
 .key-input { text-align: center; font: 700 48px Space Grotesk; letter-spacing: .22em; }
 .huge { font-size: 86px; }.detective h1 { color: #facc15; }.status-card { margin-top: 15vh; text-align: center; }
 .tile-screen { position: fixed; inset: 0; background: #000; overflow: hidden; touch-action: none; user-select: none; }
-.tile-screen img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
-.tile-hint { position: absolute; bottom: max(8px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); white-space: nowrap; border-radius: 999px; background: #0009; padding: 7px 12px; font-size: 9px; letter-spacing: .12em; }
+.tile-screen img { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; background: #000; }
+.tile-hint { position: absolute; animation: tileHintAway .45s 2.5s forwards; bottom: max(8px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); white-space: nowrap; border-radius: 999px; background: #0009; padding: 7px 12px; font-size: 9px; letter-spacing: .12em; }
 .glitch { animation: glitch .12s steps(2) 7; }.glitch::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(#fff0 0 3px, #fff3 3px 5px); mix-blend-mode: overlay; }
+@keyframes tileHintAway { to { opacity: 0; visibility: hidden; } }
 @keyframes glitch { 25% { transform: translate(7px, -3px); filter: hue-rotate(90deg); } 70% { transform: translate(-5px, 4px); filter: invert(1); } }
 @keyframes shake { 20%,60% { transform: translateX(-8px); } 40%,80% { transform: translateX(8px); } }.shake { animation: shake .3s; }
 .volunteer-head, .console-head { display: flex; align-items: center; gap: 15px; justify-content: space-between; }.volunteer-head h1, .console-head h1 { margin: 0; }
