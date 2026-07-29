@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "note": "Actual photographs sourced from Wikimedia Commons and square-cropped for puzzle use.",
+  "sources": [
+    {
+      "team": "lion",
+      "file": "content/mystery-photos/lion.webp",
+      "commonsTitle": "File:Bulldog with party-hat.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Bulldog_with_party-hat.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "tiger",
+      "file": "content/mystery-photos/tiger.webp",
+      "commonsTitle": "File:Camping dog.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Camping_dog.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "panda",
+      "file": "content/mystery-photos/panda.webp",
+      "commonsTitle": "File:12 cats eating together around a centrally placed lamp in cat cafe.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:12_cats_eating_together_around_a_centrally_placed_lamp_in_cat_cafe.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "zebra",
+      "file": "content/mystery-photos/zebra.webp",
+      "commonsTitle": "File:Zebras drinking from swimming pool.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Zebras_drinking_from_swimming_pool.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "penguin",
+      "file": "content/mystery-photos/penguin.webp",
+      "commonsTitle": "File:Dog on Train (Scotrail).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Dog_on_Train_(Scotrail).jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "fox",
+      "file": "content/mystery-photos/fox.webp",
+      "commonsTitle": "File:Cat Stretch.png",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Cat_Stretch.png",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "monkey",
+      "file": "content/mystery-photos/monkey.webp",
+      "commonsTitle": "File:2008-08-20 IMG 1883 Cat just yawning.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:2008-08-20_IMG_1883_Cat_just_yawning.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "elephant",
+      "file": "content/mystery-photos/elephant.webp",
+      "commonsTitle": "File:Moose in the Bushes (7956339452).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Moose_in_the_Bushes_(7956339452).jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "giraffe",
+      "file": "content/mystery-photos/giraffe.webp",
+      "commonsTitle": "File:Masai Giraffe Giraffa camelopardalis tippelskirchi in Tanzania 0799 cropped Nevit.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Masai_Giraffe_Giraffa_camelopardalis_tippelskirchi_in_Tanzania_0799_cropped_Nevit.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "koala",
+      "file": "content/mystery-photos/koala.webp",
+      "commonsTitle": "File:A cat on a door.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:A_cat_on_a_door.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "bear",
+      "file": "content/mystery-photos/bear.webp",
+      "commonsTitle": "File:Polar bears chewing cables.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Polar_bears_chewing_cables.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "wolf",
+      "file": "content/mystery-photos/wolf.webp",
+      "commonsTitle": "File:Ahh pony!.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Ahh_pony!.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "rabbit",
+      "file": "content/mystery-photos/rabbit.webp",
+      "commonsTitle": "File:Hase mit Ostereiern (1).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Hase_mit_Ostereiern_(1).jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "owl",
+      "file": "content/mystery-photos/owl.webp",
+      "commonsTitle": "File:Breaded Cat.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Breaded_Cat.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "crocodile",
+      "file": "content/mystery-photos/crocodile.webp",
+      "commonsTitle": "File:Angry domestic cat versus hungry Virginia opossum.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Angry_domestic_cat_versus_hungry_Virginia_opossum.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "shark",
+      "file": "content/mystery-photos/shark.webp",
+      "commonsTitle": "File:Cat (Unsplash) (2017; cropped 2023).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Cat_(Unsplash)_(2017%3B_cropped_2023).jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "dolphin",
+      "file": "content/mystery-photos/dolphin.webp",
+      "commonsTitle": "File:A cay nap.JPG",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:A_cay_nap.JPG",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "parrot",
+      "file": "content/mystery-photos/parrot.webp",
+      "commonsTitle": "File:C'mon Doggie, Let's Go! I'm ready! (26991621054).png",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:C%27mon_Doggie,_Let%27s_Go!_I%27m_ready!_(26991621054).png",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "gorilla",
+      "file": "content/mystery-photos/gorilla.webp",
+      "commonsTitle": "File:Best photo I've ever taken (5673393022).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Best_photo_I%27ve_ever_taken_(5673393022).jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    },
+    {
+      "team": "kangaroo",
+      "file": "content/mystery-photos/kangaroo.webp",
+      "commonsTitle": "File:Esel macht B\u00e4h.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File:Esel_macht_B%C3%A4h.jpg",
+      "licenseNote": "See the linked Wikimedia Commons file page for author and licence terms."
+    }
+  ]
+}
