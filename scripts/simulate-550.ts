@@ -7,7 +7,7 @@ const db = openDatabase(":memory:");
 const game = new GameService(db);
 db.prepare("UPDATE events SET phase='ASSEMBLY'").run();
 let deliveredEvents = 0;
-const disconnectors = Array.from({ length: 573 }, () => game.bus.subscribe(() => { deliveredEvents++; }));
+const disconnectors = Array.from({ length: 572 }, () => game.bus.subscribe(() => { deliveredEvents++; }));
 
 const joined: Array<{ scanToken: string; teamId: string }> = [];
 for (let index = 0; index < 550; index++) {
@@ -57,7 +57,7 @@ console.log(JSON.stringify({
   memeGroups: assignments.length,
   qaPairsMatched: matched,
   detectives: detectiveCount,
-  simulatedSseClients: 573,
+  simulatedSseClients: 572,
   eventDeliveries: deliveredEvents,
   elapsedMs
 }, null, 2));

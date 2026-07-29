@@ -138,6 +138,10 @@ describe("mystery invariants", () => {
     const counterpart = game.participantSnapshotById(pair.question_participant_id);
     expect(counterpart.mystery.role).toBe("DETECTIVE");
     expect(db.prepare("SELECT id FROM qa_pairs WHERE id=?").get(pair.id)).toBeUndefined();
+    const reactivated = game.deactivateParticipant(pair.answer_participant_id, true);
+    expect(reactivated.mystery.role).toBe("DETECTIVE");
+    expect(reactivated.mystery.question).toBeNull();
+    expect(reactivated.mystery.answerKey).toBeNull();
   });
 
   it("reconstructs an authoritative snapshot after reconnect/service restart", () => {

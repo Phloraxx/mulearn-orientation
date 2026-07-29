@@ -140,7 +140,14 @@ function scenePartFour(slug:string) {
 function fullScene(slug:string, accent:string) {
   let base = scene(slug, accent) ?? bg("#fefae0", "#f3c98b", accent);
   base += scenePartTwo(slug) + scenePartThree(slug) + scenePartFour(slug);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${base}</svg>`;
+  const texture = `<g opacity=".055" fill="none" stroke="#49613a" stroke-width="18" stroke-linecap="round">
+    <path d="M-180 300 C260 80 470 500 860 300 S1510 80 2140 390"/>
+    <path d="M-120 780 C380 520 620 980 1100 720 S1650 520 2110 820"/>
+    <path d="M-160 1320 C260 1080 590 1500 1040 1260 S1570 1100 2140 1390"/>
+    <path d="M120 1760 C450 1510 820 1830 1210 1660 S1670 1530 2050 1780"/>
+    <circle cx="340" cy="520" r="155"/><circle cx="1510" cy="470" r="210"/><circle cx="620" cy="1490" r="190"/><circle cx="1650" cy="1480" r="145"/>
+  </g>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${base}${texture}</svg>`;
 }
 for (const team of TEAMS) {
   const dir = resolve(root, team.slug);

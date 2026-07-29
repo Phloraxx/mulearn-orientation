@@ -58,8 +58,8 @@ The representative in-process concurrency simulation completed with:
   "memeGroups": 270,
   "qaPairsMatched": 270,
   "detectives": 10,
-  "simulatedSseClients": 573,
-  "eventDeliveries": 952326,
+  "simulatedSseClients": 572,
+  "eventDeliveries": 950664,
   "elapsedMs": 427
 }
 ```
