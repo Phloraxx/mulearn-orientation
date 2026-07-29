@@ -289,7 +289,11 @@ function VolunteerPanel() {
       );
       setScanMessage(`${result.status.replaceAll("_", " ")} · ${result.participant} · ${result.progress.checked}/${result.progress.total}`);
       setError(""); setScanValue(""); setCameraOpen(false); navigator.vibrate?.(80); void refresh();
-    } catch (failure: any) { setError(failure.message); navigator.vibrate?.([120, 50, 120]); }
+      return true;
+    } catch (failure: any) {
+      setError(failure.message); navigator.vibrate?.([120, 50, 120]);
+      return false;
+    }
   }
 
   async function capture(assignmentId: string, file?: File) {
@@ -329,7 +333,7 @@ function VolunteerPanel() {
         <button className="primary">CHECK IN</button>
       </form>
       <button className="camera-button" onClick={() => setCameraOpen(true)}>OPEN QR CAMERA</button>
-      {cameraOpen && <QrCamera onResult={value => void scanRaw(value)} onClose={() => setCameraOpen(false)} />}
+      {cameraOpen && <QrCamera onResult={scanRaw} onClose={() => setCameraOpen(false)} />}
       <p className="muted">The camera reads only the opaque participant token. Paste remains available as a fallback.</p>
     </section>}
     {phase === "MEME" && <section>
@@ -359,15 +363,22 @@ function VolunteerPanel() {
   </Shell>;
 }
 
-function QrCamera({ onResult, onClose }: { onResult: (value: string) => void; onClose: () => void }) {
+function QrCamera({ onResult, onClose }: { onResult: (value: string) => Promise<boolean>; onClose: () => void }) {
   const video = useRef<HTMLVideoElement>(null);
   const scanner = useRef<QrScanner | null>(null);
+  const handling = useRef(false);
   const [error, setError] = useState("");
   useEffect(() => {
     if (!video.current) return;
-    scanner.current = new QrScanner(video.current, result => {
+    scanner.current = new QrScanner(video.current, async result => {
+      if (handling.current) return;
+      handling.current = true;
       scanner.current?.stop();
-      onResult(result.data);
+      const accepted = await onResult(result.data);
+      if (!accepted && scanner.current) {
+        handling.current = false;
+        void scanner.current.start().catch(failure => setError(`Camera unavailable: ${failure?.message ?? "Could not restart camera."}`));
+      }
     }, {
       returnDetailedScanResult: true,
       preferredCamera: "environment",
