@@ -28,7 +28,7 @@
       "Keep backgrounds simple and uncluttered.",
       "No small text or captions are required for the joke to work.",
       "No dangerous contact, lifting, jumping, lying on the floor, or intimate poses.",
-      "Volunteer faces must remain clearly recognisable.",
+      "Use the approved shared meme card exactly as the participant reference; volunteer likenesses are not required.",
       "Reference image is shown on participant phones only, never on projector."
     ],
     "mysterySources": [
@@ -45,48 +45,56 @@
       "id": "pose-01",
       "title": "Spider-Man Pointing",
       "groupSize": 2,
-      "sourcePage": "https://imgflip.com/memetemplate/374442872/Spider-Man-Pointing"
+      "sourcePage": "https://imgflip.com/memetemplate/110133729/spiderman-pointing-at-spiderman",
+      "imageUrl": "https://i.imgflip.com/1tkjq9.jpg",
+      "recreationNote": "Face each other and point dramatically — one Spider-Man each."
     },
     {
       "id": "pose-02",
       "title": "Epic Handshake",
       "groupSize": 2,
-      "sourcePage": "https://imgflip.com/memetemplate/Epic-Handshake"
+      "sourcePage": "https://imgflip.com/memetemplate/Epic-Handshake",
+      "imageUrl": "https://i.imgflip.com/28j0te.jpg"
     },
     {
       "id": "pose-03",
       "title": "Absolute Cinema",
       "groupSize": 2,
       "sourcePage": "https://imgflip.com/memetemplate/531596411/Martin-Scorsese-Absolute-Cinema",
-      "recreationNote": "Both participants can mirror the same grand approval pose side-by-side."
+      "recreationNote": "Both participants can mirror the same grand approval pose side-by-side.",
+      "imageUrl": "https://i.imgflip.com/8d317n.png"
     },
     {
       "id": "pose-04",
       "title": "Drake Hotline Bling",
       "groupSize": 2,
       "sourcePage": "https://imgflip.com/memetemplate/Drake-Hotline-Bling",
-      "recreationNote": "One participant takes the reject pose and the other the approve pose."
+      "recreationNote": "One participant takes the reject pose and the other the approve pose.",
+      "imageUrl": "https://i.imgflip.com/30b1gx.jpg"
     },
     {
       "id": "pose-05",
       "title": "Woman Yelling At Cat",
       "groupSize": 2,
       "sourcePage": "https://imgflip.com/memetemplate/Woman-Yelling-At-Cat",
-      "recreationNote": "One participant is the dramatic pointer; the other recreates the unimpressed cat reaction without needing props."
+      "recreationNote": "One participant is the dramatic pointer; the other recreates the unimpressed cat reaction without needing props.",
+      "imageUrl": "https://i.imgflip.com/345v97.jpg"
     },
     {
       "id": "pose-06",
-      "title": "Two Buttons",
+      "title": "Batman / Robin Freeze Slap",
       "groupSize": 2,
-      "sourcePage": "https://imgflip.com/memetemplate/Two-Buttons",
-      "recreationNote": "One acts as the panicked decision-maker; the other presents two imaginary options/buttons."
+      "sourcePage": "https://imgflip.com/memetemplate/Batman-Slapping-Robin",
+      "recreationNote": "Freeze-frame only; no contact.",
+      "imageUrl": "https://i.imgflip.com/9ehk.jpg"
     },
     {
       "id": "pose-07",
       "title": "Running Away Balloon",
       "groupSize": 2,
       "sourcePage": "https://imgflip.com/memetemplate/Running-Away-Balloon",
-      "recreationNote": "One reaches dramatically toward an imaginary goal while the other holds/pulls them back."
+      "recreationNote": "One reaches dramatically toward an imaginary goal while the other holds/pulls them back.",
+      "imageUrl": "https://i.imgflip.com/261o3j.jpg"
     },
     {
       "id": "pose-08",
@@ -97,52 +105,59 @@
     },
     {
       "id": "pose-09",
-      "title": "Change My Mind",
+      "title": "Anakin & Padmé",
       "groupSize": 2,
-      "sourcePage": "https://imgflip.com/memetemplate/Change-My-Mind",
-      "recreationNote": "One gives the confident seated/leaning pose; the other acts as the sceptical challenger."
+      "sourcePage": "https://imgflip.com/memetemplate/Anakin-Padme-4-Panel",
+      "recreationNote": "One confident, one deeply suspicious.",
+      "imageUrl": "https://i.imgflip.com/5c7lwq.png"
     },
     {
       "id": "pose-10",
-      "title": "Surprised Pikachu",
+      "title": "Two Guys on a Bus",
       "groupSize": 2,
-      "sourcePage": "https://imgflip.com/memetemplate/Surprised-Pikachu",
-      "recreationNote": "Both participants perform exaggerated shocked reaction faces together."
+      "sourcePage": "https://imgflip.com/memetemplate/Two-guys-on-a-bus",
+      "recreationNote": "One miserable, one absurdly happy.",
+      "imageUrl": "https://i.imgflip.com/5v6gwj.jpg"
     },
     {
       "id": "pose-11",
-      "title": "Disaster Girl",
+      "title": "Buff Doge vs Cheems",
       "groupSize": 2,
-      "sourcePage": "https://imgflip.com/memetemplate/Disaster-Girl",
-      "recreationNote": "One gives the suspiciously satisfied look while the other acts as the imaginary disaster/reacting witness."
+      "sourcePage": "https://imgflip.com/memetemplate/Buff-Doge-vs-Cheems",
+      "recreationNote": "One flexes, one looks tiny and defeated.",
+      "imageUrl": "https://i.imgflip.com/43a45p.png"
     },
     {
       "id": "pose-12",
-      "title": "UNO Draw 25",
+      "title": "Evil Kermit",
       "groupSize": 2,
-      "sourcePage": "https://imgflip.com/memetemplate/UNO-Draw-25-Cards",
-      "recreationNote": "One refuses an imaginary choice; the other dramatically presents the choice/card pile."
+      "sourcePage": "https://imgflip.com/memetemplate/Evil-Kermit",
+      "recreationNote": "Normal-self versus evil-self whispering advice.",
+      "imageUrl": "https://i.imgflip.com/1e7ql7.jpg"
     },
     {
       "id": "pose-13",
-      "title": "Is This A Pigeon",
+      "title": "Scooby-Doo Mask Reveal",
       "groupSize": 2,
-      "sourcePage": "https://imgflip.com/memetemplate/Is-This-A-Pigeon",
-      "recreationNote": "One points at an imaginary object in total confusion; the other acts as the object/reaction partner."
+      "sourcePage": "https://imgflip.com/memetemplate/Scooby-doo-mask-reveal",
+      "recreationNote": "One unmasks, the other gets exposed.",
+      "imageUrl": "https://i.imgflip.com/2eeunw.jpg"
     },
     {
       "id": "pose-14",
       "title": "Leonardo DiCaprio Cheers",
       "groupSize": 2,
       "sourcePage": "https://imgflip.com/memetemplate/Leonardo-Dicaprio-Cheers",
-      "recreationNote": "Both participants perform an exaggerated celebratory toast gesture using empty hands only."
+      "recreationNote": "Both participants perform an exaggerated celebratory toast gesture using empty hands only.",
+      "imageUrl": "https://i.imgflip.com/39t1o.jpg"
     },
     {
       "id": "pose-15",
       "title": "Distracted Boyfriend",
       "groupSize": 3,
       "sourcePage": "https://imgflip.com/memetemplate/Distracted-Boyfriend",
-      "recreationNote": "Classic three-person look-back composition; keep it playful and non-romantic."
+      "recreationNote": "Classic three-person look-back composition; keep it playful and non-romantic.",
+      "imageUrl": "https://i.imgflip.com/1ur9b0.jpg"
     }
   ],
   "mysteries": [

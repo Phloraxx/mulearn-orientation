@@ -18,14 +18,14 @@ Volunteer faces are **not** required in meme references. This removes the old 30
 3. Absolute Cinema
 4. Drake Hotline Bling
 5. Woman Yelling At Cat
-6. Two Buttons
+6. Batman / Robin Freeze Slap
 7. Running Away Balloon
 8. American Chopper Argument
-9. Change My Mind
-10. Surprised Pikachu
-11. Disaster Girl
-12. UNO Draw 25
-13. Is This A Pigeon
+9. Anakin & Padmé
+10. Two Guys on a Bus
+11. Buff Doge vs Cheems
+12. Evil Kermit
+13. Scooby-Doo Mask Reveal
 14. Leonardo DiCaprio Cheers
 15. Distracted Boyfriend — trio
 

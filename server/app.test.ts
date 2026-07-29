@@ -15,7 +15,6 @@ beforeEach(() => {
   process.env.DATA_DIR = mkdtempSync(join(tmpdir(), "orientation-test-data-"));
   temporaryDirectories.push(process.env.DATA_DIR);
   delete process.env.HOST_BOOTSTRAP_SECRET;
-  delete process.env.ADMIN_BOOTSTRAP_SECRET;
   delete process.env.PROJECTOR_BOOTSTRAP_SECRET;
   delete process.env.VOLUNTEER_TOKEN_PREFIX;
   db = openDatabase(":memory:");
@@ -88,10 +87,10 @@ describe("HTTP authorization", () => {
     const game = new GameService(db);
     const joined = game.createParticipant("Recovery Student");
     const { app } = createApp(db);
-    const adminCookie = await staffCookie(app, "admin", "admin-demo-secret");
-    const recovery = await app.request(`/api/admin/participants/${joined.participant.id}/recovery`, {
+    const hostCookie = await staffCookie(app, "host", "host-demo-secret");
+    const recovery = await app.request(`/api/host/participants/${joined.participant.id}/recovery`, {
       method: "POST",
-      headers: { Cookie: adminCookie }
+      headers: { Cookie: hostCookie }
     });
     expect(recovery.status).toBe(200);
     const recoveryUrl = new URL((await recovery.json() as { recoveryUrl: string }).recoveryUrl);
@@ -192,12 +191,28 @@ describe("HTTP authorization", () => {
     expect(await revealed.text()).toBe("approved-source");
   });
 
+  it("lets the single host reset rehearsal data while preserving staff access", async () => {
+    const game = new GameService(db);
+    game.createParticipant("Reset Me");
+    const { app } = createApp(db);
+    const hostCookie = await staffCookie(app, "host", "host-demo-secret");
+    const reset = await app.request("/api/host/reset", {
+      method: "POST",
+      headers: { Cookie: hostCookie, "Content-Type": "application/json" },
+      body: JSON.stringify({ confirm: "RESET" })
+    });
+    expect(reset.status).toBe(200);
+    expect((db.prepare("SELECT COUNT(*) AS n FROM participants").get() as any).n).toBe(0);
+    expect((db.prepare("SELECT phase FROM events LIMIT 1").get() as any).phase).toBe("SETUP");
+    const stillHost = await app.request("/api/host/snapshot", { headers: { Cookie: hostCookie } });
+    expect(stillHost.status).toBe(200);
+  });
+
   it("returns not-ready and refuses demo bootstrap when production secrets are invalid", async () => {
     process.env.NODE_ENV = "production";
     process.env.SITE_URL = "https://orientation.mulearnscet.in";
     process.env.SESSION_SECRET = "short";
-    delete process.env.ADMIN_BOOTSTRAP_SECRET;
-    const { app } = createApp(db, {
+      const { app } = createApp(db, {
       assets: new AssetStore(makeAssetRoot("demo"), { NODE_ENV: "production" })
     });
     const ready = await app.request("/ready");

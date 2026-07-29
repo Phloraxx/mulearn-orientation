@@ -10,12 +10,12 @@ Assuming ~27 volunteers:
 | Anchors | 2 | Explain phases, control room energy, run final reveal commentary |
 | Media | 2 | Event coverage independent of game capture |
 | Host/projector operator | 1 | Master phase changes, timer, projector/reveal control |
-| Technical support | 1 | Participant/device/recovery/admin issues |
+| Technical support | 1 | Participant/device/recovery issues |
 | Floor coordinator / backup | 1 | Crowd flow, team-zone issues, cover emergencies |
 
 The 20 animal volunteers are **pre-selected before event day** and are not interchangeable casually because their identities are built into team content/meme references.
 
-If a fixed volunteer must be replaced at the last minute, use an admin override and accept that AI meme references may still show the originally selected person unless regenerated.
+If a fixed volunteer must be replaced at the last minute, use an host recovery override and accept that AI meme references may still show the originally selected person unless regenerated.
 
 ---
 
@@ -61,7 +61,7 @@ For the puzzle, designate one small "phone floor" area inside each team zone so 
 - [ ] production build deployed
 - [ ] public HTTPS hostname works on mobile data
 - [ ] `/health` reports healthy
-- [ ] `/projector`, `/host`, `/admin` tested
+- [ ] `/projector` and `/host` tested
 - [ ] all 20 volunteer links tested
 - [ ] Lion credential cannot scan another team (explicit test)
 - [ ] participant refresh/rejoin restoration tested
@@ -78,7 +78,7 @@ For the puzzle, designate one small "phone floor" area inside each team zone so 
 - [ ] projector set to correct browser/page
 - [ ] sound system ready for shared countdown/reveal sounds
 - [ ] host laptop plugged in
-- [ ] technical-support phone/laptop logged into admin
+- [ ] technical-support phone/laptop has the private Host link
 - [ ] volunteers receive their private team links before juniors arrive
 
 ---
@@ -130,7 +130,7 @@ Floor coordinator watches for:
 - students trying to get scanned by nearest wrong volunteer
 - corridors being blocked
 
-Tech support handles dead/broken sessions via admin.
+Tech support handles dead/broken sessions from the host recovery tools.
 
 Do not hold the event indefinitely for one or two missing students. Host can move forward when operationally sensible; inactive/missing participants can be handled before content assignment locks.
 
@@ -361,7 +361,7 @@ Scanner rejects and tells correct animal.
 
 ## Phone battery dies
 
-Tech/admin marks participant missing or transfers/recovery-restores session. Do not block entire team.
+Host recovery marks participant missing or transfers/recovery-restores session. Do not block entire team.
 
 ## Student leaves before Mystery
 
@@ -369,7 +369,7 @@ Deactivate before Q&A assignment where possible; regenerate assignments before p
 
 ## Student leaves after Q&A assignment
 
-Admin resolves/removes affected pair so remaining team is not deadlocked. Puzzle may have missing pieces; early theory submission still makes the round viable.
+Host recovery resolves/removes affected pair so remaining team is not deadlocked. Puzzle may have missing pieces; early theory submission still makes the round viable.
 
 ## Volunteer phone fails
 

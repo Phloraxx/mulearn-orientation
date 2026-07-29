@@ -82,21 +82,21 @@ export const QA_BANK = [
 ] as const;
 
 export const MEME_TEMPLATES = [
-  { id: "pose-01", title: "Spider-Man Pointing", groupSize: 2 },
-  { id: "pose-02", title: "Epic Handshake", groupSize: 2 },
-  { id: "pose-03", title: "Absolute Cinema", groupSize: 2 },
-  { id: "pose-04", title: "Drake Hotline Bling", groupSize: 2 },
-  { id: "pose-05", title: "Woman Yelling At Cat", groupSize: 2 },
-  { id: "pose-06", title: "Two Buttons", groupSize: 2 },
-  { id: "pose-07", title: "Running Away Balloon", groupSize: 2 },
-  { id: "pose-08", title: "American Chopper Argument", groupSize: 2 },
-  { id: "pose-09", title: "Change My Mind", groupSize: 2 },
-  { id: "pose-10", title: "Surprised Pikachu", groupSize: 2 },
-  { id: "pose-11", title: "Disaster Girl", groupSize: 2 },
-  { id: "pose-12", title: "UNO Draw 25", groupSize: 2 },
-  { id: "pose-13", title: "Is This A Pigeon", groupSize: 2 },
-  { id: "pose-14", title: "Leonardo DiCaprio Cheers", groupSize: 2 },
-  { id: "pose-15", title: "Distracted Boyfriend", groupSize: 3 }
+  { id: "pose-01", title: "Spider-Man Pointing", groupSize: 2, instruction: "Face each other and point dramatically — one Spider-Man each." },
+  { id: "pose-02", title: "Epic Handshake", groupSize: 2, instruction: "Do one ridiculously dramatic handshake together." },
+  { id: "pose-03", title: "Absolute Cinema", groupSize: 2, instruction: "Stand side-by-side and BOTH copy the raised-hands cinema pose." },
+  { id: "pose-04", title: "Drake Hotline Bling", groupSize: 2, instruction: "One person does the NO pose; the other does the YES pose." },
+  { id: "pose-05", title: "Woman Yelling At Cat", groupSize: 2, instruction: "One person points/yells dramatically; the other stays completely deadpan like the cat." },
+  { id: "pose-06", title: "Batman / Robin Freeze Slap", groupSize: 2, instruction: "Freeze-frame only: one raises a hand dramatically, the other reacts. NO contact." },
+  { id: "pose-07", title: "Running Away Balloon", groupSize: 2, instruction: "One reaches for an imaginary balloon while the other holds them back." },
+  { id: "pose-08", title: "American Chopper Argument", groupSize: 2, instruction: "Face each other and argue as dramatically as possible — freeze-frame, no contact." },
+  { id: "pose-09", title: "Anakin & Padmé", groupSize: 2, instruction: "One looks extremely confident; the other gives the most suspicious side-eye possible." },
+  { id: "pose-10", title: "Two Guys on a Bus", groupSize: 2, instruction: "Stand/sit side-by-side: one looks completely miserable, the other ridiculously happy." },
+  { id: "pose-11", title: "Buff Doge vs Cheems", groupSize: 2, instruction: "One flexes like an unstoppable hero; the other makes the smallest, saddest pose possible." },
+  { id: "pose-12", title: "Evil Kermit", groupSize: 2, instruction: "Face each other as normal-self vs evil-self; evil-self whispers terrible advice." },
+  { id: "pose-13", title: "Scooby-Doo Mask Reveal", groupSize: 2, instruction: "One pretends to pull off an imaginary mask; the other freezes like they just got exposed." },
+  { id: "pose-14", title: "Leonardo DiCaprio Cheers", groupSize: 2, instruction: "Both raise imaginary glasses and toast the camera." },
+  { id: "pose-15", title: "Distracted Boyfriend", groupSize: 3, instruction: "Three roles: person walking ahead, distracted person looking back, offended partner." }
 ].map(template => ({ ...template, safeForOrientation: true }));
 
 export const PAIR_MEME_TEMPLATES = MEME_TEMPLATES.filter(template => template.groupSize === 2);

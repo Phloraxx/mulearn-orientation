@@ -534,4 +534,4 @@ The game succeeds when:
 - odd participants are engaged as Detectives
 - teams can make a risky early theory submission
 - the final reveal gets laughs without needing a scoring system
-- event staff can recover from mistakes through admin controls
+- event staff can recover from mistakes through host recovery controls

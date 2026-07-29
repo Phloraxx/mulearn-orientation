@@ -80,8 +80,10 @@ export class GameService {
         FROM teams t LEFT JOIN participants p ON p.team_id=t.id AND p.active=1
         GROUP BY t.id ORDER BY count ASC, RANDOM()
       `).all() as Row[];
-      const minimum = Number(candidates[0]?.count ?? 0);
-      const eligible = candidates.filter(candidate => Number(candidate.count) === minimum);
+      const available = candidates.filter(candidate => Number(candidate.count) < 29);
+      if (!available.length) throw new GameError("EVENT_FULL", "All animal teams are full. Ask the host for help.", 409);
+      const minimum = Math.min(...available.map(candidate => Number(candidate.count)));
+      const eligible = available.filter(candidate => Number(candidate.count) === minimum);
       const selected = eligible[Math.floor(Math.random() * eligible.length)];
       this.db.prepare(`INSERT INTO participants
         (id,display_name,team_id,session_hash,scan_token_hash,created_at,last_seen_at)
@@ -129,6 +131,9 @@ export class GameService {
       phase: event.phase,
       meme: participant.meme_assignment_id ? {
         title: participant.meme_title,
+        instruction: Number(participant.group_size) === 1
+          ? "Solo rehearsal fallback: copy the reference pose yourself."
+          : (PAIR_MEME_TEMPLATES.find(item => item.id === participant.template_id) ?? TRIO_MEME_TEMPLATE)?.instruction ?? "Copy the reference pose with your group.",
         groupSize: Number(participant.group_size),
         group: group.map(item => item.display_name),
         referenceUrl: `/api/participant/meme-reference`
@@ -193,11 +198,14 @@ export class GameService {
       const teams = this.db.prepare("SELECT id FROM teams ORDER BY display_order").all() as Row[];
       for (const team of teams) {
         const participants = shuffle(this.db.prepare(`
-          SELECT id FROM participants WHERE team_id=? AND active=1 AND checked_in_at IS NOT NULL
+          SELECT id FROM participants WHERE team_id=? AND active=1
         `).all(team.id) as Row[]);
         const groupSizes: number[] = [];
         let remaining = participants.length;
-        if (remaining % 2 === 1 && remaining >= 3) {
+        if (remaining === 1) {
+          // Operational fallback for tiny rehearsal teams. Real event teams are 27–28.
+          groupSizes.push(1);
+        } else if (remaining % 2 === 1 && remaining >= 3) {
           while (remaining > 3) { groupSizes.push(2); remaining -= 2; }
           groupSizes.push(3);
         } else while (remaining >= 2) { groupSizes.push(2); remaining -= 2; }
@@ -228,7 +236,7 @@ export class GameService {
       const teams = this.db.prepare("SELECT id FROM teams ORDER BY display_order").all() as Row[];
       for (const team of teams) {
         const participants = shuffle(this.db.prepare(`
-          SELECT id FROM participants WHERE team_id=? AND active=1 AND checked_in_at IS NOT NULL
+          SELECT id FROM participants WHERE team_id=? AND active=1
         `).all(team.id) as Row[]);
         let ordinary = participants;
         if (participants.length % 2 === 1) {
@@ -326,13 +334,13 @@ export class GameService {
           .run(counterpartId);
         this.db.prepare("DELETE FROM qa_pairs WHERE id=? AND matched_at IS NULL").run(participant.qa_pair_id);
       }
-      audit(this.db, "admin", active ? "participant.activated" : "participant.deactivated", participantId);
+      audit(this.db, "host", active ? "participant.activated" : "participant.deactivated", participantId);
       this.bus.emit("participant.updated", { participantId, teamId: participant.team_id });
       return this.participantSnapshotById(participantId);
     });
   }
 
-  adminParticipants(search = "") {
+  hostParticipants(search = "") {
     const term = `%${search.trim()}%`;
     return this.db.prepare(`
       SELECT p.id,p.display_name,p.active,p.checked_in_at,p.qa_role,p.paired_at,t.name AS team_name,t.emoji

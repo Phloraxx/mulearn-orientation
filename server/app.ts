@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { getCookie, setCookie } from "hono/cookie";
 import { streamSSE } from "hono/streaming";
 import { serveStatic } from "@hono/node-server/serve-static";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { basename, join, resolve } from "node:path";
 import type { OrientationDb } from "./db.js";
@@ -280,7 +280,7 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
   });
 
   app.get("/media/meme/:id", async c => {
-    staff(c, ["projector", "host", "admin", "volunteer"]);
+    staff(c, ["projector", "host", "volunteer"]);
     const media = db.prepare("SELECT relative_path,mime_type FROM media WHERE id=? AND status='READY'")
       .get(c.req.param("id")) as { relative_path: string; mime_type: string } | undefined;
     if (!media || basename(media.relative_path) !== media.relative_path) throw new GameError("MEDIA_NOT_FOUND", "Media not found.", 404);
@@ -293,7 +293,7 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
   });
 
   app.get("/api/projector/next-slide", c => {
-    staff(c, ["projector", "host", "admin"]);
+    staff(c, ["projector", "host"]);
     const next = slideshow.next();
     if (!next) return c.json({ slide: null, durationMs: 5000, unseenBacklog: 0 });
     db.prepare("UPDATE media SET shown_at=COALESCE(shown_at,?) WHERE id=?").run(now(), next.slide.id);
@@ -304,7 +304,7 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
   });
 
   app.get("/api/reveal/mystery/:teamId", async c => {
-    staff(c, ["projector", "host", "admin"]);
+    staff(c, ["projector", "host"]);
     const event = game.event();
     if (event.phase !== "REVEAL") throw new GameError("REVEAL_LOCKED", "Mystery image is still locked.", 403);
     const team = db.prepare("SELECT slug FROM teams WHERE id=?").get(c.req.param("teamId")) as { slug: string } | undefined;
@@ -318,13 +318,13 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
   });
 
   app.post("/api/host/phase", async c => {
-    staff(c, ["host", "admin"]);
+    staff(c, ["host"]);
     const body = await c.req.json<{ phase?: Phase; mysteryMinutes?: number }>();
     return c.json(game.setPhase(body.phase as Phase, Math.max(1, Math.min(30, body.mysteryMinutes ?? 12))));
   });
 
   app.post("/api/host/reveal", async c => {
-    staff(c, ["host", "admin"]);
+    staff(c, ["host"]);
     const body = await c.req.json<{ teamId?: string; step?: string }>();
     const steps = ["THEORY", "COUNTDOWN", "ACTUAL_IMAGE"];
     const step = body.step ?? "";
@@ -335,7 +335,7 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
   });
 
   app.get("/api/host/snapshot", c => {
-    staff(c, ["host", "admin", "projector"]);
+    staff(c, ["host", "projector"]);
     const snapshot = game.publicSnapshot();
     const theories = snapshot.event.phase === "REVEAL"
       ? db.prepare("SELECT id,theory FROM teams ORDER BY display_order").all()
@@ -343,13 +343,13 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
     return c.json({ ...snapshot, theories });
   });
 
-  app.get("/api/admin/participants", c => {
-    staff(c, ["admin"]);
-    return c.json({ participants: game.adminParticipants(c.req.query("q") ?? "") });
+  app.get("/api/host/participants", c => {
+    staff(c, ["host"]);
+    return c.json({ participants: game.hostParticipants(c.req.query("q") ?? "") });
   });
 
-  app.get("/api/admin/overview", c => {
-    staff(c, ["admin"]);
+  app.get("/api/host/overview", c => {
+    staff(c, ["host"]);
     return c.json({
       teams: db.prepare("SELECT id,name,emoji FROM teams ORDER BY display_order").all(),
       media: db.prepare(`
@@ -361,23 +361,23 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
     });
   });
 
-  app.post("/api/admin/participants/:id/active", async c => {
-    staff(c, ["admin"]);
+  app.post("/api/host/participants/:id/active", async c => {
+    staff(c, ["host"]);
     const body = await c.req.json<{ active?: boolean }>();
     return c.json({ participant: game.deactivateParticipant(c.req.param("id"), Boolean(body.active)) });
   });
 
-  app.post("/api/admin/participants/:id/check-in", async c => {
-    staff(c, ["admin"]);
+  app.post("/api/host/participants/:id/check-in", async c => {
+    staff(c, ["host"]);
     const body = await c.req.json<{ checkedIn?: boolean }>();
     db.prepare("UPDATE participants SET checked_in_at=? WHERE id=?").run(body.checkedIn ? now() : null, c.req.param("id"));
-    audit(db, "admin", body.checkedIn ? "participant.manual_checkin" : "participant.manual_uncheck", c.req.param("id"));
+    audit(db, "host", body.checkedIn ? "participant.manual_checkin" : "participant.manual_uncheck", c.req.param("id"));
     game.bus.emit("participant.updated", { participantId: c.req.param("id") });
     return c.json({ ok: true });
   });
 
-  app.post("/api/admin/participants/:id/recovery", c => {
-    staff(c, ["admin"]);
+  app.post("/api/host/participants/:id/recovery", c => {
+    staff(c, ["host"]);
     const sessionToken = token();
     const scanToken = token(16);
     transaction(db, () => {
@@ -385,7 +385,7 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
         UPDATE participants SET session_hash=?,scan_token_hash=? WHERE id=?
       `).run(hash(sessionToken), hash(scanToken), c.req.param("id"));
       if (!result.changes) throw new GameError("NOT_FOUND", "Participant not found.", 404);
-      audit(db, "admin", "participant.session_and_scan_recovered", c.req.param("id"));
+      audit(db, "host", "participant.session_and_scan_recovered", c.req.param("id"));
     });
     const site = process.env.SITE_URL ?? "http://localhost:5173";
     return c.json({
@@ -393,8 +393,8 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
     });
   });
 
-  app.post("/api/admin/participants/:id/reassign", async c => {
-    staff(c, ["admin"]);
+  app.post("/api/host/participants/:id/reassign", async c => {
+    staff(c, ["host"]);
     const event = game.event();
     if (!["SETUP", "ASSEMBLY"].includes(String(event.phase))) {
       throw new GameError("ASSIGNMENTS_LOCKED", "Team reassignment is only safe before Meme mode.", 409);
@@ -407,43 +407,60 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
         qa_pair_id=NULL,puzzle_index=NULL,paired_at=NULL WHERE id=?
     `).run(team.id, c.req.param("id"));
     if (!result.changes) throw new GameError("NOT_FOUND", "Participant not found.", 404);
-    audit(db, "admin", "participant.reassigned", c.req.param("id"), { teamId: team.id });
+    audit(db, "host", "participant.reassigned", c.req.param("id"), { teamId: team.id });
     game.bus.emit("participant.updated", { participantId: c.req.param("id"), teamId: team.id });
     return c.json({ participant: game.participantSnapshotById(c.req.param("id")) });
   });
 
-  app.post("/api/admin/qa/regenerate", c => {
-    staff(c, ["admin"]);
+  app.post("/api/host/qa/regenerate", c => {
+    staff(c, ["host"]);
     const phase = String(game.event().phase);
     if (["MYSTERY", "REVEAL", "ENDED"].includes(phase)) throw new GameError("QA_LOCKED", "Q&A is already locked.", 409);
     game.generateQaAssignments(true);
     return c.json({ ok: true });
   });
 
-  app.post("/api/admin/media/:id/reset", c => {
-    staff(c, ["admin"]);
+  app.post("/api/host/media/:id/reset", c => {
+    staff(c, ["host"]);
     const media = db.prepare("SELECT assignment_id FROM media WHERE id=?").get(c.req.param("id")) as { assignment_id: string } | undefined;
     if (!media) throw new GameError("NOT_FOUND", "Media not found.", 404);
     db.prepare("UPDATE media SET status='RESET' WHERE id=?").run(c.req.param("id"));
     db.prepare("UPDATE meme_assignments SET captured_media_id=NULL,captured_at=NULL WHERE id=?").run(media.assignment_id);
-    audit(db, "admin", "media.reset", c.req.param("id"));
+    audit(db, "host", "media.reset", c.req.param("id"));
     slideshow = new Slideshow(loadSlides(db));
     return c.json({ ok: true });
   });
 
-  app.post("/api/admin/teams/:id/theory-clear", c => {
-    staff(c, ["admin"]);
+  app.post("/api/host/teams/:id/theory-clear", c => {
+    staff(c, ["host"]);
     db.prepare("UPDATE teams SET theory=NULL,theory_submitted_at=NULL WHERE id=?").run(c.req.param("id"));
-    audit(db, "admin", "team.theory_cleared", c.req.param("id"));
+    audit(db, "host", "team.theory_cleared", c.req.param("id"));
     game.bus.emit("team.theory_submitted", { teamId: c.req.param("id"), cleared: true });
     return c.json({ ok: true });
+  });
+
+  app.post("/api/host/reset", async c => {
+    staff(c, ["host"]);
+    const body = await c.req.json<{ confirm?: string }>().catch(() => ({ confirm: undefined }));
+    if (body.confirm !== "RESET") throw new GameError("RESET_CONFIRMATION", "Type RESET to confirm a full event reset.", 422);
+    transaction(db, () => {
+      db.exec("DELETE FROM media; DELETE FROM qa_pairs; DELETE FROM meme_assignments; DELETE FROM participants;");
+      db.prepare("UPDATE teams SET theory=NULL,theory_submitted_at=NULL").run();
+      db.prepare("UPDATE events SET phase='SETUP',mystery_ends_at=NULL,reveal_team_id=NULL,reveal_step='THEORY',updated_at=?").run(now());
+      audit(db, "host", "event.reset", "event-main");
+    });
+    await rm(mediaDir, { recursive: true, force: true });
+    await mkdir(mediaDir, { recursive: true });
+    slideshow = new Slideshow([]);
+    game.bus.emit("phase.changed", { phase: "SETUP", reset: true });
+    return c.json({ ok: true, snapshot: game.publicSnapshot() });
   });
 
   app.get("/api/stream", c => {
     let allowed = false;
     try { participantId(c); allowed = true; } catch {}
     if (!allowed) {
-      try { staff(c, ["volunteer", "host", "admin", "projector"]); allowed = true; } catch {}
+      try { staff(c, ["volunteer", "host", "projector"]); allowed = true; } catch {}
     }
     if (!allowed) throw new GameError("SESSION_REQUIRED", "Session required.", 401);
     return streamSSE(c, async stream => {
