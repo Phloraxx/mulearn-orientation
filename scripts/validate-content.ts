@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 import { MEME_TEMPLATES, QA_BANK, TEAMS } from "../server/content.js";
 import { AssetStore, type AssetManifest } from "../server/assets.js";
@@ -40,6 +41,7 @@ else {
       else if (statSync(meme.path).size < 10_000) failures.push(`Meme reference looks suspiciously small: ${template.id}`);
     }
     for (const team of TEAMS) {
+      const tileHashes: string[] = [];
       const source = assets.mysterySource(team.slug);
       if (!source) failures.push(`Missing approved mystery source: ${team.slug}`);
       else {
@@ -54,8 +56,10 @@ else {
         else {
           const meta = await sharp(tile.path).metadata();
           if (meta.width !== 800 || meta.height !== 1400) failures.push(`Puzzle tile must be 800×1400: ${team.slug}/${String(index).padStart(2, "0")}`);
+          tileHashes.push(createHash("sha256").update(readFileSync(tile.path)).digest("hex"));
         }
       }
+      if (new Set(tileHashes).size !== tileHashes.length) failures.push(`Puzzle contains byte-identical/ambiguous tiles: ${team.slug}`);
     }
   }
 }

@@ -335,12 +335,16 @@ export class GameService {
       if (!participant) throw new GameError("NOT_FOUND", "Participant not found.", 404);
       this.db.prepare("UPDATE participants SET active=? WHERE id=?").run(active ? 1 : 0, participantId);
       if (!active && participant.qa_pair_id && !participant.paired_at) {
-        const pair = this.db.prepare("SELECT * FROM qa_pairs WHERE id=?").get(participant.qa_pair_id) as Row;
-        const counterpartId = pair.question_participant_id === participantId
-          ? String(pair.answer_participant_id) : String(pair.question_participant_id);
+        const pair = this.db.prepare("SELECT * FROM qa_pairs WHERE id=?").get(participant.qa_pair_id) as Row | undefined;
+        if (pair) {
+          const counterpartId = pair.question_participant_id === participantId
+            ? String(pair.answer_participant_id) : String(pair.question_participant_id);
+          this.db.prepare("UPDATE participants SET qa_role='DETECTIVE',qa_pair_id=NULL,puzzle_index=NULL WHERE id=? AND paired_at IS NULL")
+            .run(counterpartId);
+          this.db.prepare("DELETE FROM qa_pairs WHERE id=? AND matched_at IS NULL").run(participant.qa_pair_id);
+        }
         this.db.prepare("UPDATE participants SET qa_role='DETECTIVE',qa_pair_id=NULL,puzzle_index=NULL WHERE id=? AND paired_at IS NULL")
-          .run(counterpartId);
-        this.db.prepare("DELETE FROM qa_pairs WHERE id=? AND matched_at IS NULL").run(participant.qa_pair_id);
+          .run(participantId);
       }
       audit(this.db, "host", active ? "participant.activated" : "participant.deactivated", participantId);
       this.bus.emit("participant.updated", { participantId, teamId: participant.team_id });
