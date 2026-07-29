@@ -213,6 +213,22 @@ export function createApp(db: OrientationDb, options: { assets?: AssetStore } = 
     return c.json({ ok: true, role, teamId });
   });
 
+  app.get("/api/auth/session", c => {
+    const requestedRole = c.req.query("role") ?? "";
+    if (!["host", "projector", "volunteer"].includes(requestedRole)) {
+      throw new GameError("BAD_ROLE", "Unknown staff role.", 400);
+    }
+    const auth = staff(c, [requestedRole]);
+    if (requestedRole === "volunteer") {
+      const teamSlug = c.req.query("teamSlug") ?? "";
+      const team = db.prepare("SELECT id FROM teams WHERE slug=?").get(teamSlug) as { id: string } | undefined;
+      if (!team || team.id !== auth.teamId) {
+        throw new GameError("FORBIDDEN", "This volunteer link belongs to another animal team.", 403);
+      }
+    }
+    return c.json({ ok: true, role: auth.role, teamId: auth.teamId ?? null });
+  });
+
   app.get("/api/public/snapshot", c => c.json(game.publicSnapshot()));
 
   app.get("/api/volunteer/snapshot", c => {
