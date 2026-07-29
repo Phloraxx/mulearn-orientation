@@ -94,6 +94,13 @@ describe("mystery invariants", () => {
       .toThrowError("WRONG AAL — iniyum nokku.");
   });
 
+  it("uses every 7x4 puzzle position when a team has 28 active participants", () => {
+    roster("team-lion", 28);
+    game.setPhase("MYSTERY");
+    const indices = (db.prepare("SELECT puzzle_index FROM participants WHERE team_id='team-lion' ORDER BY puzzle_index").all() as Array<{ puzzle_index: number }>).map(row => row.puzzle_index);
+    expect(indices).toEqual(Array.from({ length: 28 }, (_, index) => index));
+  });
+
   it("creates exactly one clue-less Detective for an odd roster", () => {
     roster("team-lion", 27);
     game.setPhase("MYSTERY");
@@ -105,6 +112,11 @@ describe("mystery invariants", () => {
     expect(snapshot.mystery.answer).toBeNull();
     expect(snapshot.mystery.tileUrl).toBeNull();
     expect(detectives[0].puzzle_index).toBeNull();
+    const tileIndices = (db.prepare("SELECT puzzle_index FROM participants WHERE team_id='team-lion' AND qa_role!='DETECTIVE' ORDER BY puzzle_index").all() as Array<{ puzzle_index: number }>).map(row => row.puzzle_index);
+    expect(tileIndices).toHaveLength(26);
+    expect(new Set(tileIndices).size).toBe(26);
+    expect(tileIndices).not.toContain(0);
+    expect(tileIndices).not.toContain(27);
   });
 
   it("allows early theory lock and still accepts later matches", () => {

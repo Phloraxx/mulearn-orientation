@@ -143,7 +143,7 @@ The template set is fixed at exactly 15 references: 14 unique two-person
 templates and one three-person template. Approved meme references are installed
 under `content/generated-assets/meme-references/`.
 
-After approved mystery source images are installed, `pnpm content:tiles` crops
+Approved mystery sources are square, text-free action images. `pnpm content:tiles` crops
 each real source into its 7×4 set of 28 portrait WebP tiles. Coordinates remain
 in private manifests and are never sent through participant APIs. See
 `content/generated-assets/README.md` for the exact tree.

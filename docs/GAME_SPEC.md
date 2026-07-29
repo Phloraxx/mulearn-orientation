@@ -357,6 +357,10 @@ The full-screen puzzle view should be built for phones placed on the floor:
 
 Use a consistent tile canvas so different phone aspect ratios do not destroy usability. Small image overlap between adjacent source crops is acceptable if it helps humans align mixed phone sizes, but do not make placement trivial.
 
+Production puzzle geometry is a **square source image divided into a 7×4 logical grid**. Each crop is rendered on a 4:7 portrait canvas without stretching, and the phone uses `contain` rather than cropping the piece again.
+
+For a 28-person team, all 28 grid positions are available. For a 27-person team, one Detective has no tile, leaving 26 phone pieces; the two deliberately omitted positions are opposite non-essential corners/background areas rather than arbitrary final indices. The source composition must keep the meaningful action away from those corners.
+
 ## Progressive assembly
 
 The team starts arranging the phones the moment the first pair unlocks.

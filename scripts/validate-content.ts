@@ -2,6 +2,7 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { MEME_TEMPLATES, QA_BANK, TEAMS } from "../server/content.js";
 import { AssetStore, type AssetManifest } from "../server/assets.js";
+import sharp from "sharp";
 
 const failures: string[] = [];
 if (TEAMS.length !== 20) failures.push(`Expected 20 enabled teams; found ${TEAMS.length}.`);
@@ -39,9 +40,21 @@ else {
       else if (statSync(meme.path).size < 10_000) failures.push(`Meme reference looks suspiciously small: ${template.id}`);
     }
     for (const team of TEAMS) {
-      if (!assets.mysterySource(team.slug)) failures.push(`Missing approved mystery source: ${team.slug}`);
+      const source = assets.mysterySource(team.slug);
+      if (!source) failures.push(`Missing approved mystery source: ${team.slug}`);
+      else {
+        const meta = await sharp(source.path).metadata();
+        if (!meta.width || !meta.height || meta.width < 1400 || meta.height < 1400 || Math.abs(meta.width / meta.height - 1) > 0.04) {
+          failures.push(`Mystery source must be square and at least 1400×1400: ${team.slug}`);
+        }
+      }
       for (let index = 0; index < 28; index++) {
-        if (!assets.puzzleTile(team.slug, index)) failures.push(`Missing approved tile: ${team.slug}/${String(index).padStart(2, "0")}`);
+        const tile = assets.puzzleTile(team.slug, index);
+        if (!tile) failures.push(`Missing approved tile: ${team.slug}/${String(index).padStart(2, "0")}`);
+        else {
+          const meta = await sharp(tile.path).metadata();
+          if (meta.width !== 800 || meta.height !== 1400) failures.push(`Puzzle tile must be 800×1400: ${team.slug}/${String(index).padStart(2, "0")}`);
+        }
       }
     }
   }

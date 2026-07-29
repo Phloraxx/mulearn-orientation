@@ -17,27 +17,31 @@ for (const team of TEAMS) {
   }
   const metadata = await sharp(source).metadata();
   if (!metadata.width || !metadata.height) throw new Error(`Cannot read dimensions for ${source}`);
-  if (metadata.width < 1400 || metadata.height < 800) {
-    throw new Error(`${source} is too small; approved mystery sources must be at least 1400×800.`);
+  if (metadata.width < 1400 || metadata.height < 1400) {
+    throw new Error(`${source} is too small; approved mystery sources must be at least 1400×1400.`);
   }
+  const ratio = metadata.width / metadata.height;
+  if (ratio < 0.96 || ratio > 1.04) throw new Error(`${source} must be approximately square; got ${metadata.width}×${metadata.height}.`);
   const tilesDirectory = resolve(teamRoot, "tiles");
   await mkdir(tilesDirectory, { recursive: true });
   const cellWidth = metadata.width / columns;
   const cellHeight = metadata.height / rows;
+  const cropWidth = Math.round(cellWidth * (1 + overlapRatio * 2));
+  const cropHeight = Math.round(cropWidth * 7 / 4);
   const layout: Array<{ index: number; x: number; y: number }> = [];
 
   for (let index = 0; index < 28; index++) {
     const column = index % columns;
     const row = Math.floor(index / columns);
-    const overlapX = cellWidth * overlapRatio;
-    const overlapY = cellHeight * overlapRatio;
-    const left = Math.max(0, Math.floor(column * cellWidth - overlapX));
-    const top = Math.max(0, Math.floor(row * cellHeight - overlapY));
-    const right = Math.min(metadata.width, Math.ceil((column + 1) * cellWidth + overlapX));
-    const bottom = Math.min(metadata.height, Math.ceil((row + 1) * cellHeight + overlapY));
+    const centerX = (column + 0.5) * cellWidth;
+    const centerY = (row + 0.5) * cellHeight;
+    let left = Math.round(centerX - cropWidth / 2);
+    let top = Math.round(centerY - cropHeight / 2);
+    left = Math.max(0, Math.min(metadata.width - cropWidth, left));
+    top = Math.max(0, Math.min(metadata.height - cropHeight, top));
     await sharp(source)
-      .extract({ left, top, width: right - left, height: bottom - top })
-      .resize(600, 960, { fit: "fill" })
+      .extract({ left, top, width: cropWidth, height: cropHeight })
+      .resize(800, 1400, { fit: "fill" })
       .webp({ quality: 88 })
       .toFile(resolve(tilesDirectory, `${String(index).padStart(2, "0")}.webp`));
     layout.push({ index, x: column, y: row });
